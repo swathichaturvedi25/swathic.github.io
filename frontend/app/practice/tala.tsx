@@ -130,15 +130,25 @@ const TALAS: TalaItem[] = [
     mathra: 7,
     bhaga: 3,
     chanda: '3 + 2 + 2',
-    dharana: '|| dhei thatin Dhaka |\nThantin Dhakal\nThatin Dhaka ||',
+    dharana: '|| dhei thatin dhaka thatin dhaka thatin dhaka ||',
+    dharanaByLaya: {
+      VL: '|| dhei thatin dhaka thatin dhaka thatin dhaka ||',
+      ML: '|| dhei thatin | dhaka thatin | dhaka thatin |\ndhaka dhei | thatin dhaka |\nthatin dhaka | thatin dhaka ||',
+      DL: '|| dhei thatin dhaka thatin | dhaka thatin dhaka dhei | thatin dhaka thatin dhaka | thatin dhaka dhei thatin | dhaka thatin dhaka thatin | dhaka dhei thatin dhaka | thatin dhaka thatin dhaka ||',
+    },
   },
   {
-    name: 'Kemta Tala',
+    name: 'Khemta Tala',
     jati: 'Tishra Jathi',
     mathra: 6,
     bhaga: 2,
     chanda: '3 + 3',
-    dharana: '|| dha Dina kita |\nNa thina kita ||',
+    dharana: '|| dha dina kita na thina kita ||',
+    dharanaByLaya: {
+      VL: '|| dha dina kita na thina kita ||',
+      ML: '|| dha dina | kita na | thina kita | dha dina | kita na | thina kita ||',
+      DL: '|| dha dina kita na | thina kita dha dina | kita na thina kita | dha dina kita na | thina kita dha dina | kita na thina kita ||',
+    },
   },
 ];
 
