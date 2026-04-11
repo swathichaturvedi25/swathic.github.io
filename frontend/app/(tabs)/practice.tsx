@@ -25,7 +25,7 @@ export default function PracticeScreen() {
     {
       id: 'watch-videos',
       title: 'Teacher Videos',
-      description: 'Watch and learn at different speeds',
+      description: 'Watch and learn at different speeds (0.5x-2x)',
       icon: 'play-circle',
       color: '#4ECDC4',
       route: '/practice/videos',
@@ -65,8 +65,12 @@ export default function PracticeScreen() {
                 { borderColor: option.color },
               ]}
               onPress={() => {
-                // Navigate to specific practice screen
-                console.log(`Navigate to ${option.route}`);
+                if (option.id === 'watch-videos') {
+                  router.push(option.route as any);
+                } else {
+                  console.log(`Navigate to ${option.route}`);
+                  // Other features coming soon
+                }
               }}
             >
               <View style={[styles.iconContainer, { backgroundColor: option.color + '20' }]}>
