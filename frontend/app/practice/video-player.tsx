@@ -31,10 +31,15 @@ export default function VideoPlayerScreen() {
   
   console.log('Video URL:', videoUrl);
 
-  const player = useVideoPlayer(videoUrl, (player) => {
-    player.loop = false;
-    player.playbackRate = playbackSpeed;
-  });
+  const player = useVideoPlayer(videoUrl);
+
+  // Set player properties after creation
+  React.useEffect(() => {
+    if (player) {
+      player.loop = false;
+      player.playbackRate = playbackSpeed;
+    }
+  }, [player, playbackSpeed]);
 
   const speedOptions = [
     { label: '0.5x', value: 0.5 },
