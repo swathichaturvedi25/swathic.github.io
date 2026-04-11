@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { VideoView, useVideoPlayer } from 'expo-video';
+import { Video, ResizeMode } from 'expo-av';
 import Slider from '@react-native-community/slider';
+import { api } from '../../utils/api';
 
 const { width } = Dimensions.get('window');
 
@@ -20,26 +22,13 @@ export default function VideoPlayerScreen() {
   const { videoData } = useLocalSearchParams();
   const video = videoData ? JSON.parse(String(videoData)) : null;
   
+  const videoRef = useRef<Video>(null);
+  const [status, setStatus] = useState<any>({});
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const [isMirrored, setIsMirrored] = useState(false);
 
-  // Construct the video URL properly
   const videoUrl = video?.video_base64 || video?.video_url || '';
-  
-  console.log('Video URL:', videoUrl);
-
-  const player = useVideoPlayer(videoUrl);
-
-  // Set player properties after creation
-  React.useEffect(() => {
-    if (player) {
-      player.loop = false;
-      player.playbackRate = playbackSpeed;
-    }
-  }, [player, playbackSpeed]);
 
   const speedOptions = [
     { label: '0.5x', value: 0.5 },
@@ -50,50 +39,72 @@ export default function VideoPlayerScreen() {
     { label: '2x', value: 2.0 },
   ];
 
-  const handlePlaybackSpeedChange = (speed: number) => {
-    setPlaybackSpeed(speed);
-    player.playbackRate = speed;
-  };
-
-  const handlePlayPause = () => {
-    if (player.playing) {
-      player.pause();
-    } else {
-      player.play();
-    }
-  };
-
-  const handleReplay = () => {
-    player.currentTime = 0;
-    player.play();
-  };
-
-  const handleSeek = (value: number) => {
-    if (player) {
-      player.currentTime = value * (duration || 1);
-    }
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  // Update time periodically
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      if (player) {
-        setCurrentTime(player.currentTime);
-        if (player.duration && player.duration > 0) {
-          setDuration(player.duration);
-          if (isLoading) setIsLoading(false);
-        }
+  useEffect(() => {
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.unloadAsync();
       }
-    }, 100);
+    };
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [player, isLoading]);
+  const handlePlaybackSpeedChange = async (speed: number) => {
+    setPlaybackSpeed(speed);
+    if (videoRef.current) {
+      await videoRef.current.setRateAsync(speed, true);
+    }
+  };
+
+  const handlePlayPause = async () => {
+    if (videoRef.current) {
+      if (status.isPlaying) {
+        await videoRef.current.pauseAsync();
+      } else {
+        await videoRef.current.playAsync();
+      }
+    }
+  };
+
+  const handleReplay = async () => {
+    if (videoRef.current) {
+      await videoRef.current.replayAsync();
+    }
+  };
+
+  const handleSeek = async (value: number) => {
+    if (videoRef.current && status.durationMillis) {
+      await videoRef.current.setPositionAsync(value * status.durationMillis);
+    }
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete Video',
+      `Delete "${video.title}"? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await api.deleteTeacherVideo(video.id);
+              Alert.alert('Success', 'Video deleted!');
+              router.back();
+            } catch (error) {
+              Alert.alert('Error', 'Failed to delete video');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const formatTime = (millis: number) => {
+    const totalSeconds = Math.floor(millis / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   if (!video) {
     return (
@@ -110,16 +121,21 @@ export default function VideoPlayerScreen() {
           <Ionicons name="arrow-back" size={24} color="#FFD700" />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>{video.title}</Text>
-        <TouchableOpacity
-          onPress={() => setIsMirrored(!isMirrored)}
-          style={styles.mirrorButton}
-        >
-          <Ionicons
-            name={isMirrored ? "sync" : "sync-outline"}
-            size={24}
-            color={isMirrored ? "#FFD700" : "#999"}
-          />
-        </TouchableOpacity>
+        <View style={styles.headerButtons}>
+          <TouchableOpacity
+            onPress={() => setIsMirrored(!isMirrored)}
+            style={styles.iconButton}
+          >
+            <Ionicons
+              name={isMirrored ? "sync" : "sync-outline"}
+              size={22}
+              color={isMirrored ? "#FFD700" : "#999"}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleDelete} style={styles.iconButton}>
+            <Ionicons name="trash-outline" size={22} color="#FF6B6B" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.videoContainer}>
@@ -129,19 +145,26 @@ export default function VideoPlayerScreen() {
             <Text style={styles.loadingText}>Loading video...</Text>
           </View>
         )}
-        <VideoView
+        <Video
+          ref={videoRef}
+          source={{ uri: videoUrl }}
           style={[
             styles.video,
             isMirrored && { transform: [{ scaleX: -1 }] }
           ]}
-          player={player}
-          allowsFullscreen
-          allowsPictureInPicture
-          contentFit="contain"
+          resizeMode={ResizeMode.CONTAIN}
+          shouldPlay={false}
+          isLooping={false}
+          onPlaybackStatusUpdate={(status) => setStatus(status)}
+          onLoad={() => setIsLoading(false)}
+          onError={(error) => {
+            console.error('Video load error:', error);
+            setIsLoading(false);
+            Alert.alert('Error', 'Failed to load video. Please try again.');
+          }}
         />
       </View>
 
-      {/* Video Info */}
       <View style={styles.infoSection}>
         <Text style={styles.videoTitle}>{video.title}</Text>
         {video.description && (
@@ -149,31 +172,28 @@ export default function VideoPlayerScreen() {
         )}
       </View>
 
-      {/* Playback Controls */}
       <View style={styles.controlsContainer}>
-        {/* Progress Bar */}
-        {duration > 0 && (
+        {status.durationMillis > 0 && (
           <View style={styles.progressContainer}>
             <Text style={styles.timeText}>
-              {formatTime(currentTime)}
+              {formatTime(status.positionMillis || 0)}
             </Text>
             <Slider
               style={styles.slider}
               minimumValue={0}
               maximumValue={1}
-              value={duration > 0 ? currentTime / duration : 0}
+              value={(status.positionMillis || 0) / status.durationMillis}
               onSlidingComplete={handleSeek}
               minimumTrackTintColor="#FFD700"
               maximumTrackTintColor="#333"
               thumbTintColor="#FFD700"
             />
             <Text style={styles.timeText}>
-              {formatTime(duration)}
+              {formatTime(status.durationMillis || 0)}
             </Text>
           </View>
         )}
 
-        {/* Play/Pause Button */}
         <View style={styles.playbackButtons}>
           <TouchableOpacity onPress={handleReplay} style={styles.controlButton}>
             <Ionicons name="refresh" size={28} color="#FFD700" />
@@ -181,7 +201,7 @@ export default function VideoPlayerScreen() {
           
           <TouchableOpacity onPress={handlePlayPause} style={styles.playButton}>
             <Ionicons
-              name={player.playing ? 'pause' : 'play'}
+              name={status.isPlaying ? 'pause' : 'play'}
               size={40}
               color="#1a0033"
             />
@@ -190,7 +210,6 @@ export default function VideoPlayerScreen() {
           <View style={{ width: 56 }} />
         </View>
 
-        {/* Speed Controls */}
         <View style={styles.speedSection}>
           <Text style={styles.speedLabel}>Playback Speed</Text>
           <View style={styles.speedButtons}>
@@ -215,10 +234,7 @@ export default function VideoPlayerScreen() {
             ))}
           </View>
           <Text style={styles.speedHint}>
-            💡 Use slower speeds (0.5x - 0.75x) to learn steps in detail
-          </Text>
-          <Text style={styles.mirrorHint}>
-            🔄 Tap the mirror icon at top to flip the video horizontally
+            💡 Use 0.5x-0.75x to learn steps • Tap 🔄 to mirror video
           </Text>
         </View>
       </View>
@@ -243,9 +259,6 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
   },
-  mirrorButton: {
-    padding: 8,
-  },
   headerTitle: {
     flex: 1,
     fontSize: 16,
@@ -253,6 +266,13 @@ const styles = StyleSheet.create({
     color: '#FFD700',
     textAlign: 'center',
     marginHorizontal: 8,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  iconButton: {
+    padding: 8,
   },
   videoContainer: {
     width: width,
@@ -386,13 +406,6 @@ const styles = StyleSheet.create({
     color: '#999',
     textAlign: 'center',
     marginTop: 12,
-    lineHeight: 18,
-  },
-  mirrorHint: {
-    fontSize: 12,
-    color: '#999',
-    textAlign: 'center',
-    marginTop: 6,
     lineHeight: 18,
   },
   errorText: {
