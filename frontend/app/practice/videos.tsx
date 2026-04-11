@@ -60,13 +60,54 @@ export default function TeacherVideosScreen() {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         allowsEditing: true,
-        quality: 0.8,
+        quality: 0.5, // Reduced quality for smaller file size
+        videoMaxDuration: 300, // 5 minutes max
       });
 
       if (!result.canceled && result.assets[0]) {
         const videoUri = result.assets[0].uri;
-        setSelectedVideoUri(videoUri);
-        setModalVisible(true);
+        
+        // Check file size
+        const fileInfo = await FileSystem.getInfoAsync(videoUri);
+        if (fileInfo.exists && fileInfo.size) {
+          const fileSizeMB = fileInfo.size / (1024 * 1024);
+          
+          if (fileSizeMB > 10) {
+            Alert.alert(
+              'File Too Large',
+              `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
+              `Maximum size: 10MB\n\n` +
+              `Tips to reduce size:\n` +
+              `• Record shorter videos (1-2 minutes)\n` +
+              `• Use lower quality recording\n` +
+              `• Trim the video before uploading\n` +
+              `• Use a video compressor app`,
+              [{ text: 'OK' }]
+            );
+            return;
+          }
+          
+          if (fileSizeMB > 5) {
+            Alert.alert(
+              'Large File',
+              `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
+              `This may take a while to upload. Continue?`,
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { 
+                  text: 'Continue', 
+                  onPress: () => {
+                    setSelectedVideoUri(videoUri);
+                    setModalVisible(true);
+                  }
+                },
+              ]
+            );
+          } else {
+            setSelectedVideoUri(videoUri);
+            setModalVisible(true);
+          }
+        }
       }
     } catch (error) {
       console.error('Error picking video:', error);
@@ -82,6 +123,14 @@ export default function TeacherVideosScreen() {
 
     setUploading(true);
     try {
+      // Get file info for size display
+      const fileInfo = await FileSystem.getInfoAsync(selectedVideoUri);
+      const fileSizeMB = fileInfo.exists && fileInfo.size 
+        ? (fileInfo.size / (1024 * 1024)).toFixed(1) 
+        : '?';
+      
+      console.log(`Uploading video: ${fileSizeMB}MB`);
+      
       // Convert video to base64
       const base64 = await FileSystem.readAsStringAsync(selectedVideoUri, {
         encoding: FileSystem.EncodingType.Base64,
@@ -101,9 +150,17 @@ export default function TeacherVideosScreen() {
       setNewVideo({ title: '', description: '', difficulty_level: 'beginner' });
       setSelectedVideoUri(null);
       loadVideos();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading video:', error);
-      Alert.alert('Error', 'Failed to upload video. Make sure the video is not too large.');
+      
+      let errorMessage = 'Failed to upload video.';
+      if (error.message?.includes('413') || error.message?.includes('too large')) {
+        errorMessage = 'Video file is too large. Please use a video under 10MB or compress it first.';
+      } else if (error.message?.includes('timeout')) {
+        errorMessage = 'Upload timed out. Please try with a smaller video or better internet connection.';
+      }
+      
+      Alert.alert('Upload Failed', errorMessage);
     } finally {
       setUploading(false);
     }
@@ -140,9 +197,14 @@ export default function TeacherVideosScreen() {
       <ScrollView style={styles.scrollView}>
         <View style={styles.description}>
           <Ionicons name="information-circle" size={20} color="#FFD700" />
-          <Text style={styles.descriptionText}>
-            Upload your teacher's videos and watch them at slower speeds to learn step-by-step
-          </Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.descriptionText}>
+              Upload your teacher's videos and watch them at slower speeds to learn step-by-step
+            </Text>
+            <Text style={styles.sizeHint}>
+              💡 Maximum video size: 10MB • Recommended: 1-2 minute clips
+            </Text>
+          </View>
         </View>
 
         {loading ? (
@@ -330,10 +392,15 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   descriptionText: {
-    flex: 1,
     fontSize: 14,
     color: '#CCCCCC',
     lineHeight: 20,
+    marginBottom: 6,
+  },
+  sizeHint: {
+    fontSize: 12,
+    color: '#999',
+    fontStyle: 'italic',
   },
   videosContainer: {
     paddingHorizontal: 16,
