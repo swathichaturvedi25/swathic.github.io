@@ -312,19 +312,34 @@ async def delete_teacher_video(video_id: str):
 # Serve video files under /api/uploads
 @api_router.api_route("/uploads/videos/{filename}", methods=["GET", "HEAD"])
 async def get_video_file(filename: str):
-    """Serve video files"""
+    """Serve video files with iOS-compatible streaming"""
+    from fastapi.responses import StreamingResponse
+    import aiofiles
+    
     filepath = UPLOAD_DIR / filename
     if not filepath.exists():
         raise HTTPException(status_code=404, detail="Video file not found")
     
-    from fastapi.responses import FileResponse
-    return FileResponse(
-        filepath,
+    file_size = filepath.stat().st_size
+    
+    async def file_iterator():
+        async with aiofiles.open(filepath, mode='rb') as f:
+            while chunk := await f.read(8192):
+                yield chunk
+    
+    headers = {
+        "Content-Type": "video/mp4",
+        "Accept-Ranges": "bytes",
+        "Content-Length": str(file_size),
+        "Cache-Control": "public, max-age=31536000",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Expose-Headers": "Content-Length, Content-Range",
+    }
+    
+    return StreamingResponse(
+        file_iterator(),
         media_type="video/mp4",
-        headers={
-            "Accept-Ranges": "bytes",
-            "Cache-Control": "public, max-age=3600"
-        }
+        headers=headers
     )
 
 # Music Tracks
