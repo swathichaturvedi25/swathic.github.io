@@ -63,7 +63,8 @@
           "icon": "./assets/images/icon.png",
           "color": "#FFD700"
         }
-      ]
+      ],
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true

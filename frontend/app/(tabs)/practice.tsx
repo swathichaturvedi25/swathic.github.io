@@ -15,14 +15,6 @@ export default function PracticeScreen() {
 
   const practiceOptions = [
     {
-      id: 'video-record',
-      title: 'Record Practice',
-      description: 'Record yourself practicing and review later',
-      icon: 'videocam',
-      color: '#FF6B6B',
-      route: '/practice/record',
-    },
-    {
       id: 'watch-videos',
       title: 'Teacher Videos',
       description: 'Watch and learn at different speeds (0.5x-2x)',
@@ -31,12 +23,12 @@ export default function PracticeScreen() {
       route: '/practice/videos',
     },
     {
-      id: 'timer',
-      title: 'Practice Timer',
-      description: 'Time your practice sessions',
-      icon: 'timer',
+      id: 'hasta-mudras',
+      title: 'Hasta Mudras',
+      description: 'Learn and practice hand gestures',
+      icon: 'hand-left',
       color: '#FFD93D',
-      route: '/practice/timer',
+      route: '/practice/mudras',
     },
     {
       id: 'music',
@@ -66,6 +58,8 @@ export default function PracticeScreen() {
               ]}
               onPress={() => {
                 if (option.id === 'watch-videos') {
+                  router.push(option.route as any);
+                } else if (option.id === 'hasta-mudras') {
                   router.push(option.route as any);
                 } else {
                   console.log(`Navigate to ${option.route}`);
