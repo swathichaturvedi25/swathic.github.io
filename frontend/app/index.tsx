@@ -16,8 +16,8 @@ export default function WelcomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🕉️ Odissi Dance</Text>
-      <Text style={styles.subtitle}>Practice & Learn</Text>
+      <Text style={styles.title}>🕉️ Abhyasa:</Text>
+      <Text style={styles.subtitle}>Odissi Dance</Text>
       <Text style={styles.tagline}>Classical Indian Dance Excellence</Text>
     </View>
   );
