@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, File, UploadFile
+from fastapi import FastAPI, APIRouter, HTTPException, File, UploadFile, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -311,9 +311,9 @@ async def delete_teacher_video(video_id: str):
 
 # Serve video files under /api/uploads
 @api_router.api_route("/uploads/videos/{filename}", methods=["GET", "HEAD"])
-async def get_video_file(filename: str):
-    """Serve video files with iOS-compatible streaming"""
-    from fastapi.responses import StreamingResponse
+async def get_video_file(filename: str, request: Request):
+    """Serve video files with proper Range request support for iOS"""
+    from fastapi.responses import StreamingResponse, Response
     import aiofiles
     
     filepath = UPLOAD_DIR / filename
@@ -322,25 +322,64 @@ async def get_video_file(filename: str):
     
     file_size = filepath.stat().st_size
     
-    async def file_iterator():
-        async with aiofiles.open(filepath, mode='rb') as f:
-            while chunk := await f.read(8192):
-                yield chunk
+    # Parse Range header
+    range_header = request.headers.get('range')
     
-    headers = {
-        "Content-Type": "video/mp4",
-        "Accept-Ranges": "bytes",
-        "Content-Length": str(file_size),
-        "Cache-Control": "public, max-age=31536000",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Expose-Headers": "Content-Length, Content-Range",
-    }
-    
-    return StreamingResponse(
-        file_iterator(),
-        media_type="video/mp4",
-        headers=headers
-    )
+    if range_header:
+        # Handle range request for iOS video streaming
+        range_match = range_header.replace('bytes=', '').split('-')
+        start = int(range_match[0]) if range_match[0] else 0
+        end = int(range_match[1]) if len(range_match) > 1 and range_match[1] else file_size - 1
+        
+        chunk_size = end - start + 1
+        
+        async def file_chunk():
+            async with aiofiles.open(filepath, mode='rb') as f:
+                await f.seek(start)
+                remaining = chunk_size
+                while remaining > 0:
+                    read_size = min(8192, remaining)
+                    chunk = await f.read(read_size)
+                    if not chunk:
+                        break
+                    remaining -= len(chunk)
+                    yield chunk
+        
+        headers = {
+            "Content-Type": "video/mp4",
+            "Accept-Ranges": "bytes",
+            "Content-Range": f"bytes {start}-{end}/{file_size}",
+            "Content-Length": str(chunk_size),
+            "Cache-Control": "public, max-age=31536000",
+            "Access-Control-Allow-Origin": "*",
+        }
+        
+        return StreamingResponse(
+            file_chunk(),
+            status_code=206,
+            media_type="video/mp4",
+            headers=headers
+        )
+    else:
+        # Full file request
+        async def file_iterator():
+            async with aiofiles.open(filepath, mode='rb') as f:
+                while chunk := await f.read(8192):
+                    yield chunk
+        
+        headers = {
+            "Content-Type": "video/mp4",
+            "Accept-Ranges": "bytes",
+            "Content-Length": str(file_size),
+            "Cache-Control": "public, max-age=31536000",
+            "Access-Control-Allow-Origin": "*",
+        }
+        
+        return StreamingResponse(
+            file_iterator(),
+            media_type="video/mp4",
+            headers=headers
+        )
 
 # Music Tracks
 @api_router.post("/music-tracks", response_model=MusicTrack)
