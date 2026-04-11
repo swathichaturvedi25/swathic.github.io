@@ -23,12 +23,12 @@ export default function PracticeScreen() {
       route: '/practice/videos',
     },
     {
-      id: 'hasta-mudras',
-      title: 'Hasta Mudras',
+      id: 'hasta-bheda',
+      title: 'Hasta Bheda',
       description: 'Learn and practice hand gestures',
       icon: 'hand-left',
       color: '#FFD93D',
-      route: '/practice/mudras',
+      route: '/practice/hasta-bheda',
     },
     {
       id: 'music',
@@ -59,7 +59,7 @@ export default function PracticeScreen() {
               onPress={() => {
                 if (option.id === 'watch-videos') {
                   router.push(option.route as any);
-                } else if (option.id === 'hasta-mudras') {
+                } else if (option.id === 'hasta-bheda') {
                   router.push(option.route as any);
                 } else {
                   console.log(`Navigate to ${option.route}`);
