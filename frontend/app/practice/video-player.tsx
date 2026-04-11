@@ -24,6 +24,7 @@ export default function VideoPlayerScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isMirrored, setIsMirrored] = useState(false);
 
   // Construct the video URL properly
   const videoUrl = video?.video_base64 || video?.video_url || '';
@@ -104,7 +105,16 @@ export default function VideoPlayerScreen() {
           <Ionicons name="arrow-back" size={24} color="#FFD700" />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>{video.title}</Text>
-        <View style={{ width: 40 }} />
+        <TouchableOpacity
+          onPress={() => setIsMirrored(!isMirrored)}
+          style={styles.mirrorButton}
+        >
+          <Ionicons
+            name={isMirrored ? "sync" : "sync-outline"}
+            size={24}
+            color={isMirrored ? "#FFD700" : "#999"}
+          />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.videoContainer}>
@@ -115,7 +125,10 @@ export default function VideoPlayerScreen() {
           </View>
         )}
         <VideoView
-          style={styles.video}
+          style={[
+            styles.video,
+            isMirrored && { transform: [{ scaleX: -1 }] }
+          ]}
           player={player}
           allowsFullscreen
           allowsPictureInPicture
@@ -199,6 +212,9 @@ export default function VideoPlayerScreen() {
           <Text style={styles.speedHint}>
             💡 Use slower speeds (0.5x - 0.75x) to learn steps in detail
           </Text>
+          <Text style={styles.mirrorHint}>
+            🔄 Tap the mirror icon at top to flip the video horizontally
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -220,6 +236,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#333',
   },
   backButton: {
+    padding: 8,
+  },
+  mirrorButton: {
     padding: 8,
   },
   headerTitle: {
@@ -362,6 +381,13 @@ const styles = StyleSheet.create({
     color: '#999',
     textAlign: 'center',
     marginTop: 12,
+    lineHeight: 18,
+  },
+  mirrorHint: {
+    fontSize: 12,
+    color: '#999',
+    textAlign: 'center',
+    marginTop: 6,
     lineHeight: 18,
   },
   errorText: {

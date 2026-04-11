@@ -108,6 +108,13 @@ export const api = {
     return response.json();
   },
   
+  deleteTeacherVideo: async (id: string) => {
+    const response = await fetch(`${API_URL}/teacher-videos/${id}`, {
+      method: 'DELETE',
+    });
+    return response.json();
+  },
+  
   // Quiz
   generateQuiz: async (topic: string, numQuestions: number = 5) => {
     const response = await fetch(`${API_URL}/generate-quiz`, {

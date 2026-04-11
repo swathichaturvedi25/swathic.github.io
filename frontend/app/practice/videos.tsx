@@ -239,41 +239,53 @@ export default function TeacherVideosScreen() {
         ) : videos.length > 0 ? (
           <View style={styles.videosContainer}>
             {videos.map((video) => (
-              <TouchableOpacity
-                key={video.id}
-                style={styles.videoCard}
-                onPress={() => playVideo(video)}
-              >
-                <View style={styles.videoThumbnail}>
-                  <Ionicons name="play-circle" size={48} color="#FFD700" />
-                </View>
-                <View style={styles.videoInfo}>
-                  <Text style={styles.videoTitle}>{video.title}</Text>
-                  {video.description && (
-                    <Text style={styles.videoDescription} numberOfLines={2}>
-                      {video.description}
-                    </Text>
-                  )}
-                  <View style={styles.videoMeta}>
-                    <View
-                      style={[
-                        styles.difficultyBadge,
-                        { backgroundColor: getDifficultyColor(video.difficulty_level) + '30' },
-                      ]}
-                    >
-                      <Text
+              <View key={video.id} style={styles.videoCardWrapper}>
+                <TouchableOpacity
+                  style={styles.videoCard}
+                  onPress={() => playVideo(video)}
+                >
+                  <View style={styles.videoThumbnail}>
+                    <Ionicons name="play-circle" size={48} color="#FFD700" />
+                  </View>
+                  <View style={styles.videoInfo}>
+                    <Text style={styles.videoTitle}>{video.title}</Text>
+                    {video.description && (
+                      <Text style={styles.videoDescription} numberOfLines={2}>
+                        {video.description}
+                      </Text>
+                    )}
+                    <View style={styles.videoMeta}>
+                      <View
                         style={[
-                          styles.difficultyText,
-                          { color: getDifficultyColor(video.difficulty_level) },
+                          styles.difficultyBadge,
+                          { backgroundColor: getDifficultyColor(video.difficulty_level) + '30' },
                         ]}
                       >
-                        {video.difficulty_level.toUpperCase()}
-                      </Text>
+                        <Text
+                          style={[
+                            styles.difficultyText,
+                            { color: getDifficultyColor(video.difficulty_level) },
+                          ]}
+                        >
+                          {video.difficulty_level.toUpperCase()}
+                        </Text>
+                      </View>
+                      {video.file_size_mb && (
+                        <Text style={styles.fileSizeText}>
+                          {video.file_size_mb}MB
+                        </Text>
+                      )}
                     </View>
                   </View>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color="#666" />
-              </TouchableOpacity>
+                  <Ionicons name="chevron-forward" size={24} color="#666" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => deleteVideo(video.id, video.title)}
+                >
+                  <Ionicons name="trash-outline" size={24} color="#FF6B6B" />
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
         ) : (
@@ -432,15 +444,29 @@ const styles = StyleSheet.create({
   videosContainer: {
     paddingHorizontal: 16,
   },
+  videoCardWrapper: {
+    marginBottom: 12,
+    position: 'relative',
+  },
   videoCard: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#1a0033',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 12,
     borderWidth: 1,
     borderColor: '#333',
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: '#1a0033',
+    borderRadius: 20,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#FF6B6B',
+    zIndex: 10,
   },
   videoThumbnail: {
     width: 80,
@@ -468,6 +494,11 @@ const styles = StyleSheet.create({
   videoMeta: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
+  },
+  fileSizeText: {
+    fontSize: 11,
+    color: '#999',
   },
   difficultyBadge: {
     paddingHorizontal: 10,
@@ -560,6 +591,40 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#0a001a',
     borderWidth: 2,
+    alignItems: 'center',
+  },
+  difficultyChipActive: {
+    backgroundColor: '#1a0033',
+  },
+  difficultyChipText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#666',
+  },
+  uploadButtonLarge: {
+    flexDirection: 'row',
+    backgroundColor: '#FFD700',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  uploadButtonDisabled: {
+    opacity: 0.6,
+  },
+  uploadButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1a0033',
+  },
+  uploadingText: {
+    fontSize: 14,
+    color: '#FFD700',
+    textAlign: 'center',
+    marginTop: 12,
+  },
+});2,
     alignItems: 'center',
   },
   difficultyChipActive: {
