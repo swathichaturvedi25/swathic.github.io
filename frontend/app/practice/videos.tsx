@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+import { getInfoAsync, readAsStringAsync, EncodingType } from 'expo-file-system/legacy';
 import { api } from '../../utils/api';
 
 export default function TeacherVideosScreen() {
@@ -59,59 +59,71 @@ export default function TeacherVideosScreen() {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-        allowsEditing: true,
-        quality: 0.5, // Reduced quality for smaller file size
-        videoMaxDuration: 300, // 5 minutes max
+        allowsEditing: false, // Changed to false - editing can cause issues
+        quality: 0.5,
+        videoMaxDuration: 300,
       });
 
       if (!result.canceled && result.assets[0]) {
         const videoUri = result.assets[0].uri;
         
-        // Check file size
-        const fileInfo = await FileSystem.getInfoAsync(videoUri);
-        if (fileInfo.exists && fileInfo.size) {
-          const fileSizeMB = fileInfo.size / (1024 * 1024);
+        // Try to check file size, but continue even if it fails
+        try {
+          const fileInfo = await getInfoAsync(videoUri, { size: true });
           
-          if (fileSizeMB > 10) {
-            Alert.alert(
-              'File Too Large',
-              `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
-              `Maximum size: 10MB\n\n` +
-              `Tips to reduce size:\n` +
-              `• Record shorter videos (1-2 minutes)\n` +
-              `• Use lower quality recording\n` +
-              `• Trim the video before uploading\n` +
-              `• Use a video compressor app`,
-              [{ text: 'OK' }]
-            );
-            return;
+          if (fileInfo.exists && 'size' in fileInfo && fileInfo.size) {
+            const fileSizeMB = fileInfo.size / (1024 * 1024);
+            
+            if (fileSizeMB > 10) {
+              Alert.alert(
+                'File Too Large',
+                `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
+                `Maximum size: 10MB\n\n` +
+                `Tips to reduce size:\n` +
+                `• Record shorter videos (1-2 minutes)\n` +
+                `• Use lower quality recording\n` +
+                `• Trim the video before uploading\n` +
+                `• Use a video compressor app`,
+                [{ text: 'OK' }]
+              );
+              return;
+            }
+            
+            if (fileSizeMB > 5) {
+              Alert.alert(
+                'Large File',
+                `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
+                `This may take a while to upload. Continue?`,
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { 
+                    text: 'Continue', 
+                    onPress: () => {
+                      setSelectedVideoUri(videoUri);
+                      setModalVisible(true);
+                    }
+                  },
+                ]
+              );
+              return;
+            }
           }
-          
-          if (fileSizeMB > 5) {
-            Alert.alert(
-              'Large File',
-              `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
-              `This may take a while to upload. Continue?`,
-              [
-                { text: 'Cancel', style: 'cancel' },
-                { 
-                  text: 'Continue', 
-                  onPress: () => {
-                    setSelectedVideoUri(videoUri);
-                    setModalVisible(true);
-                  }
-                },
-              ]
-            );
-          } else {
-            setSelectedVideoUri(videoUri);
-            setModalVisible(true);
-          }
+        } catch (sizeError) {
+          console.log('Could not check file size, continuing anyway:', sizeError);
+          // Continue with upload even if we can't check size
         }
+        
+        // If size check passed or couldn't be performed, open upload modal
+        setSelectedVideoUri(videoUri);
+        setModalVisible(true);
       }
     } catch (error) {
       console.error('Error picking video:', error);
-      Alert.alert('Error', 'Failed to pick video');
+      Alert.alert(
+        'Error',
+        'Failed to select video. Please try again or choose a different video.',
+        [{ text: 'OK' }]
+      );
     }
   };
 
@@ -124,7 +136,7 @@ export default function TeacherVideosScreen() {
     setUploading(true);
     try {
       // Get file info for size display
-      const fileInfo = await FileSystem.getInfoAsync(selectedVideoUri);
+      const fileInfo = await getInfoAsync(selectedVideoUri);
       const fileSizeMB = fileInfo.exists && fileInfo.size 
         ? (fileInfo.size / (1024 * 1024)).toFixed(1) 
         : '?';
@@ -132,8 +144,8 @@ export default function TeacherVideosScreen() {
       console.log(`Uploading video: ${fileSizeMB}MB`);
       
       // Convert video to base64
-      const base64 = await FileSystem.readAsStringAsync(selectedVideoUri, {
-        encoding: FileSystem.EncodingType.Base64,
+      const base64 = await readAsStringAsync(selectedVideoUri, {
+        encoding: EncodingType.Base64,
       });
 
       const videoData = {
