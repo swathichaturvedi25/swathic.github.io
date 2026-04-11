@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import Slider from '@react-native-community/slider';
 
 const { width } = Dimensions.get('window');
@@ -20,16 +20,20 @@ export default function VideoPlayerScreen() {
   const { videoData } = useLocalSearchParams();
   const video = videoData ? JSON.parse(videoData as string) : null;
   
-  const videoRef = useRef<Video>(null);
-  const [status, setStatus] = useState<any>({});
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   // Construct the video URL properly
   const videoUrl = video?.video_base64 || video?.video_url || '';
   
   console.log('Video URL:', videoUrl);
-  console.log('Full video object:', video);
+
+  const player = useVideoPlayer(videoUrl, (player) => {
+    player.loop = false;
+    player.playbackRate = playbackSpeed;
+  });
 
   const speedOptions = [
     { label: '0.5x', value: 0.5 },
@@ -40,49 +44,50 @@ export default function VideoPlayerScreen() {
     { label: '2x', value: 2.0 },
   ];
 
-  useEffect(() => {
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.unloadAsync();
-      }
-    };
-  }, []);
-
-  const handlePlaybackSpeedChange = async (speed: number) => {
+  const handlePlaybackSpeedChange = (speed: number) => {
     setPlaybackSpeed(speed);
-    if (videoRef.current) {
-      await videoRef.current.setRateAsync(speed, true);
+    player.playbackRate = speed;
+  };
+
+  const handlePlayPause = () => {
+    if (player.playing) {
+      player.pause();
+    } else {
+      player.play();
     }
   };
 
-  const handlePlayPause = async () => {
-    if (videoRef.current) {
-      if (status.isPlaying) {
-        await videoRef.current.pauseAsync();
-      } else {
-        await videoRef.current.playAsync();
+  const handleReplay = () => {
+    player.currentTime = 0;
+    player.play();
+  };
+
+  const handleSeek = (value: number) => {
+    if (player) {
+      player.currentTime = value * (duration || 1);
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Update time periodically
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (player) {
+        setCurrentTime(player.currentTime);
+        if (player.duration && player.duration > 0) {
+          setDuration(player.duration);
+          if (isLoading) setIsLoading(false);
+        }
       }
-    }
-  };
+    }, 100);
 
-  const handleReplay = async () => {
-    if (videoRef.current) {
-      await videoRef.current.replayAsync();
-    }
-  };
-
-  const handleSeek = async (value: number) => {
-    if (videoRef.current && status.durationMillis) {
-      await videoRef.current.setPositionAsync(value * status.durationMillis);
-    }
-  };
-
-  const formatTime = (millis: number) => {
-    const totalSeconds = Math.floor(millis / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
+    return () => clearInterval(interval);
+  }, [player, isLoading]);
 
   if (!video) {
     return (
@@ -109,23 +114,12 @@ export default function VideoPlayerScreen() {
             <Text style={styles.loadingText}>Loading video...</Text>
           </View>
         )}
-        <Video
-          ref={videoRef}
-          source={{ uri: videoUrl }}
+        <VideoView
           style={styles.video}
-          resizeMode={ResizeMode.CONTAIN}
-          shouldPlay={false}
-          isLooping={false}
-          onPlaybackStatusUpdate={(status) => setStatus(status)}
-          onLoad={() => {
-            console.log('Video loaded successfully');
-            setIsLoading(false);
-          }}
-          onError={(error) => {
-            console.error('Video error:', error);
-            console.error('Failed URL:', videoUrl);
-            setIsLoading(false);
-          }}
+          player={player}
+          allowsFullscreen
+          allowsPictureInPicture
+          contentFit="contain"
         />
       </View>
 
@@ -140,23 +134,23 @@ export default function VideoPlayerScreen() {
       {/* Playback Controls */}
       <View style={styles.controlsContainer}>
         {/* Progress Bar */}
-        {status.durationMillis > 0 && (
+        {duration > 0 && (
           <View style={styles.progressContainer}>
             <Text style={styles.timeText}>
-              {formatTime(status.positionMillis || 0)}
+              {formatTime(currentTime)}
             </Text>
             <Slider
               style={styles.slider}
               minimumValue={0}
               maximumValue={1}
-              value={(status.positionMillis || 0) / status.durationMillis}
+              value={duration > 0 ? currentTime / duration : 0}
               onSlidingComplete={handleSeek}
               minimumTrackTintColor="#FFD700"
               maximumTrackTintColor="#333"
               thumbTintColor="#FFD700"
             />
             <Text style={styles.timeText}>
-              {formatTime(status.durationMillis || 0)}
+              {formatTime(duration)}
             </Text>
           </View>
         )}
@@ -169,7 +163,7 @@ export default function VideoPlayerScreen() {
           
           <TouchableOpacity onPress={handlePlayPause} style={styles.playButton}>
             <Ionicons
-              name={status.isPlaying ? 'pause' : 'play'}
+              name={player.playing ? 'pause' : 'play'}
               size={40}
               color="#1a0033"
             />
