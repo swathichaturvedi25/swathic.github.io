@@ -624,38 +624,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 12,
   },
-});2,
-    alignItems: 'center',
-  },
-  difficultyChipActive: {
-    backgroundColor: '#1a0033',
-  },
-  difficultyChipText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#666',
-  },
-  uploadButtonLarge: {
-    flexDirection: 'row',
-    backgroundColor: '#FFD700',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  uploadButtonDisabled: {
-    opacity: 0.6,
-  },
-  uploadButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1a0033',
-  },
-  uploadingText: {
-    fontSize: 14,
-    color: '#FFD700',
-    textAlign: 'center',
-    marginTop: 12,
-  },
 });

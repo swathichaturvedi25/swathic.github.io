@@ -18,7 +18,7 @@ const { width } = Dimensions.get('window');
 export default function VideoPlayerScreen() {
   const router = useRouter();
   const { videoData } = useLocalSearchParams();
-  const video = videoData ? JSON.parse(videoData as string) : null;
+  const video = videoData ? JSON.parse(String(videoData)) : null;
   
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [isLoading, setIsLoading] = useState(true);
