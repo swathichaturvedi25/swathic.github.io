@@ -25,6 +25,12 @@ export default function VideoPlayerScreen() {
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Construct the video URL properly
+  const videoUrl = video?.video_base64 || video?.video_url || '';
+  
+  console.log('Video URL:', videoUrl);
+  console.log('Full video object:', video);
+
   const speedOptions = [
     { label: '0.5x', value: 0.5 },
     { label: '0.75x', value: 0.75 },
@@ -105,15 +111,19 @@ export default function VideoPlayerScreen() {
         )}
         <Video
           ref={videoRef}
-          source={{ uri: video.video_base64 }}
+          source={{ uri: videoUrl }}
           style={styles.video}
           resizeMode={ResizeMode.CONTAIN}
           shouldPlay={false}
           isLooping={false}
           onPlaybackStatusUpdate={(status) => setStatus(status)}
-          onLoad={() => setIsLoading(false)}
+          onLoad={() => {
+            console.log('Video loaded successfully');
+            setIsLoading(false);
+          }}
           onError={(error) => {
             console.error('Video error:', error);
+            console.error('Failed URL:', videoUrl);
             setIsLoading(false);
           }}
         />

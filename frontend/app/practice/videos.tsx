@@ -180,11 +180,18 @@ export default function TeacherVideosScreen() {
 
   const playVideo = (video: any) => {
     // Convert video_url to full URL
+    const backendUrl = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+    const videoUrl = video.video_url.startsWith('http') 
+      ? video.video_url 
+      : `${backendUrl}${video.video_url}`;
+    
+    console.log('Backend URL:', backendUrl);
+    console.log('Video URL from DB:', video.video_url);
+    console.log('Full Video URL:', videoUrl);
+    
     const videoWithFullUrl = {
       ...video,
-      video_base64: video.video_url.startsWith('http') 
-        ? video.video_url 
-        : `${process.env.EXPO_PUBLIC_BACKEND_URL}${video.video_url}`
+      video_base64: videoUrl
     };
     
     router.push({
