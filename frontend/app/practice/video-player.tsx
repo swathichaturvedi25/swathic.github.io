@@ -48,8 +48,16 @@ export default function VideoPlayerScreen() {
   ];
 
   useEffect(() => {
-    // Unlock all orientations
+    // Unlock all orientations for video playback
     ScreenOrientation.unlockAsync();
+    
+    // Get current orientation
+    ScreenOrientation.getOrientationAsync().then((currentOrientation) => {
+      if (currentOrientation === ScreenOrientation.Orientation.LANDSCAPE_LEFT || 
+          currentOrientation === ScreenOrientation.Orientation.LANDSCAPE_RIGHT) {
+        setOrientation('landscape');
+      }
+    });
     
     // Listen for orientation changes
     const subscription = ScreenOrientation.addOrientationChangeListener((evt) => {
@@ -63,7 +71,14 @@ export default function VideoPlayerScreen() {
     });
 
     return () => {
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+      // Lock back to portrait when leaving video player (mobile only)
+      try {
+        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT).catch(() => {
+          // Ignore errors on platforms that don't support locking (web)
+        });
+      } catch (e) {
+        // Ignore
+      }
       subscription.remove();
       if (videoRef.current) {
         videoRef.current.unloadAsync();
