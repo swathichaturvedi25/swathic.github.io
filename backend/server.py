@@ -270,7 +270,7 @@ async def create_teacher_video(video: TeacherVideoCreate):
             id=video_id,
             title=video.title,
             description=video.description,
-            video_url=f"/uploads/videos/{filename}",
+            video_url=f"/api/uploads/videos/{filename}",  # Changed to /api/uploads
             file_size_mb=round(file_size_mb, 2),
             difficulty_level=video.difficulty_level,
         )
@@ -308,6 +308,24 @@ async def delete_teacher_video(video_id: str):
         raise HTTPException(status_code=404, detail="Video not found in database")
     
     return {"message": "Video deleted successfully"}
+
+# Serve video files under /api/uploads
+@api_router.api_route("/uploads/videos/{filename}", methods=["GET", "HEAD"])
+async def get_video_file(filename: str):
+    """Serve video files"""
+    filepath = UPLOAD_DIR / filename
+    if not filepath.exists():
+        raise HTTPException(status_code=404, detail="Video file not found")
+    
+    from fastapi.responses import FileResponse
+    return FileResponse(
+        filepath,
+        media_type="video/mp4",
+        headers={
+            "Accept-Ranges": "bytes",
+            "Cache-Control": "public, max-age=3600"
+        }
+    )
 
 # Music Tracks
 @api_router.post("/music-tracks", response_model=MusicTrack)
@@ -490,9 +508,6 @@ async def get_statistics():
 
 # Include the router in the main app
 app.include_router(api_router)
-
-# Mount uploads directory for serving video files
-app.mount("/uploads", StaticFiles(directory=str(ROOT_DIR / "uploads")), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,
