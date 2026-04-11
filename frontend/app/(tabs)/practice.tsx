@@ -32,8 +32,8 @@ export default function PracticeScreen() {
     },
     {
       id: 'music',
-      title: 'Music Player',
-      description: 'Practice with traditional Odissi music',
+      title: 'Music',
+      description: 'Tala, rhythms and Odissi music',
       icon: 'musical-notes',
       color: '#95E1D3',
       route: '/practice/music',
@@ -61,9 +61,10 @@ export default function PracticeScreen() {
                   router.push(option.route as any);
                 } else if (option.id === 'hasta-bheda') {
                   router.push(option.route as any);
+                } else if (option.id === 'music') {
+                  router.push(option.route as any);
                 } else {
                   console.log(`Navigate to ${option.route}`);
-                  // Other features coming soon
                 }
               }}
             >
