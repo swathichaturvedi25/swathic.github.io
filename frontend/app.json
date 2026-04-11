@@ -16,7 +16,8 @@
         "NSPhotoLibraryUsageDescription": "Save and access practice recordings",
         "NSPhotoLibraryAddUsageDescription": "Save practice recordings to gallery",
         "NSUserNotificationsUsageDescription": "Get reminders for practice sessions"
-      }
+      },
+      "requireFullScreen": false
     },
     "android": {
       "adaptiveIcon": {

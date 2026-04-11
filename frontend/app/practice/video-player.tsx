@@ -4,18 +4,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Dimensions,
   ActivityIndicator,
   Alert,
+  Modal,
+  StatusBar,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Video, ResizeMode } from 'expo-av';
 import Slider from '@react-native-community/slider';
 import { api } from '../../utils/api';
-
-const { width } = Dimensions.get('window');
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 export default function VideoPlayerScreen() {
   const router = useRouter();
@@ -23,35 +25,86 @@ export default function VideoPlayerScreen() {
   const video = videoData ? JSON.parse(String(videoData)) : null;
   
   const videoRef = useRef<Video>(null);
+  const hideControlsTimeout = useRef<NodeJS.Timeout | null>(null);
+  
   const [status, setStatus] = useState<any>({});
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [isLoading, setIsLoading] = useState(true);
   const [isMirrored, setIsMirrored] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const [showSpeedPicker, setShowSpeedPicker] = useState(false);
+  const [orientation, setOrientation] = useState('portrait');
 
   const videoUrl = video?.video_base64 || video?.video_url || '';
 
   const speedOptions = [
+    { label: '0.25x', value: 0.25 },
     { label: '0.5x', value: 0.5 },
     { label: '0.75x', value: 0.75 },
-    { label: '1x', value: 1.0 },
+    { label: '1x (Normal)', value: 1.0 },
     { label: '1.25x', value: 1.25 },
     { label: '1.5x', value: 1.5 },
     { label: '2x', value: 2.0 },
   ];
 
   useEffect(() => {
+    // Unlock all orientations
+    ScreenOrientation.unlockAsync();
+    
+    // Listen for orientation changes
+    const subscription = ScreenOrientation.addOrientationChangeListener((evt) => {
+      const orient = evt.orientationInfo.orientation;
+      if (orient === ScreenOrientation.Orientation.LANDSCAPE_LEFT || 
+          orient === ScreenOrientation.Orientation.LANDSCAPE_RIGHT) {
+        setOrientation('landscape');
+      } else {
+        setOrientation('portrait');
+      }
+    });
+
     return () => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+      subscription.remove();
       if (videoRef.current) {
         videoRef.current.unloadAsync();
+      }
+      if (hideControlsTimeout.current) {
+        clearTimeout(hideControlsTimeout.current);
       }
     };
   }, []);
 
+  useEffect(() => {
+    if (showControls) {
+      resetHideControlsTimer();
+    }
+  }, [showControls]);
+
+  const resetHideControlsTimer = () => {
+    if (hideControlsTimeout.current) {
+      clearTimeout(hideControlsTimeout.current);
+    }
+    hideControlsTimeout.current = setTimeout(() => {
+      if (status.isPlaying) {
+        setShowControls(false);
+      }
+    }, 4000);
+  };
+
+  const toggleControls = () => {
+    setShowControls(!showControls);
+    if (!showControls) {
+      resetHideControlsTimer();
+    }
+  };
+
   const handlePlaybackSpeedChange = async (speed: number) => {
     setPlaybackSpeed(speed);
+    setShowSpeedPicker(false);
     if (videoRef.current) {
       await videoRef.current.setRateAsync(speed, true);
     }
+    resetHideControlsTimer();
   };
 
   const handlePlayPause = async () => {
@@ -62,18 +115,30 @@ export default function VideoPlayerScreen() {
         await videoRef.current.playAsync();
       }
     }
+    resetHideControlsTimer();
   };
 
-  const handleReplay = async () => {
-    if (videoRef.current) {
-      await videoRef.current.replayAsync();
+  const handleRewind = async () => {
+    if (videoRef.current && status.positionMillis) {
+      const newPosition = Math.max(0, status.positionMillis - 5000);
+      await videoRef.current.setPositionAsync(newPosition);
     }
+    resetHideControlsTimer();
+  };
+
+  const handleForward = async () => {
+    if (videoRef.current && status.positionMillis && status.durationMillis) {
+      const newPosition = Math.min(status.durationMillis, status.positionMillis + 5000);
+      await videoRef.current.setPositionAsync(newPosition);
+    }
+    resetHideControlsTimer();
   };
 
   const handleSeek = async (value: number) => {
     if (videoRef.current && status.durationMillis) {
       await videoRef.current.setPositionAsync(value * status.durationMillis);
     }
+    resetHideControlsTimer();
   };
 
   const handleDelete = () => {
@@ -108,175 +173,197 @@ export default function VideoPlayerScreen() {
 
   if (!video) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Text style={styles.errorText}>Video not found</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
+  const { width, height } = Dimensions.get('window');
+  const isLandscape = orientation === 'landscape';
+
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#FFD700" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>{video.title}</Text>
-        <View style={styles.headerButtons}>
-          <TouchableOpacity
-            onPress={() => setIsMirrored(!isMirrored)}
-            style={styles.iconButton}
-          >
-            <Ionicons
-              name={isMirrored ? "sync" : "sync-outline"}
-              size={22}
-              color={isMirrored ? "#FFD700" : "#999"}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete} style={styles.iconButton}>
-            <Ionicons name="trash-outline" size={22} color="#FF6B6B" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.videoContainer}>
-        {isLoading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#FFD700" />
-            <Text style={styles.loadingText}>Loading video...</Text>
-          </View>
-        )}
-        <Video
-          ref={videoRef}
-          source={{ uri: videoUrl }}
-          style={[
-            styles.video,
-            isMirrored && { transform: [{ scaleX: -1 }] }
-          ]}
-          resizeMode={ResizeMode.CONTAIN}
-          shouldPlay={false}
-          isLooping={false}
-          onPlaybackStatusUpdate={(status) => setStatus(status)}
-          onLoad={() => setIsLoading(false)}
-          onError={(error) => {
-            console.error('Video load error:', error);
-            setIsLoading(false);
-            Alert.alert('Error', 'Failed to load video. Please try again.');
-          }}
-        />
-      </View>
-
-      <View style={styles.infoSection}>
-        <Text style={styles.videoTitle}>{video.title}</Text>
-        {video.description && (
-          <Text style={styles.videoDescription}>{video.description}</Text>
-        )}
-      </View>
-
-      <View style={styles.controlsContainer}>
-        {status.durationMillis > 0 && (
-          <View style={styles.progressContainer}>
-            <Text style={styles.timeText}>
-              {formatTime(status.positionMillis || 0)}
-            </Text>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={1}
-              value={(status.positionMillis || 0) / status.durationMillis}
-              onSlidingComplete={handleSeek}
-              minimumTrackTintColor="#FFD700"
-              maximumTrackTintColor="#333"
-              thumbTintColor="#FFD700"
-            />
-            <Text style={styles.timeText}>
-              {formatTime(status.durationMillis || 0)}
-            </Text>
-          </View>
-        )}
-
-        <View style={styles.playbackButtons}>
-          <TouchableOpacity onPress={handleReplay} style={styles.controlButton}>
-            <Ionicons name="refresh" size={28} color="#FFD700" />
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <StatusBar hidden />
+      
+      <TouchableWithoutFeedback onPress={toggleControls}>
+        <View style={styles.videoContainer}>
+          {isLoading && (
+            <View style={styles.loadingOverlay}>
+              <ActivityIndicator size="large" color="#FFD700" />
+              <Text style={styles.loadingText}>Loading...</Text>
+            </View>
+          )}
           
-          <TouchableOpacity onPress={handlePlayPause} style={styles.playButton}>
-            <Ionicons
-              name={status.isPlaying ? 'pause' : 'play'}
-              size={40}
-              color="#1a0033"
-            />
-          </TouchableOpacity>
-          
-          <View style={{ width: 56 }} />
-        </View>
+          <Video
+            ref={videoRef}
+            source={{ uri: videoUrl }}
+            style={[
+              styles.video,
+              isMirrored && { transform: [{ scaleX: -1 }] }
+            ]}
+            resizeMode={ResizeMode.CONTAIN}
+            shouldPlay={false}
+            isLooping={false}
+            onPlaybackStatusUpdate={(status) => setStatus(status)}
+            onLoad={() => setIsLoading(false)}
+            onError={(error) => {
+              console.error('Video error:', error);
+              setIsLoading(false);
+            }}
+          />
 
-        <View style={styles.speedSection}>
-          <Text style={styles.speedLabel}>Playback Speed</Text>
-          <View style={styles.speedButtons}>
-            {speedOptions.map((option) => (
-              <TouchableOpacity
-                key={option.value}
-                style={[
-                  styles.speedButton,
-                  playbackSpeed === option.value && styles.speedButtonActive,
-                ]}
-                onPress={() => handlePlaybackSpeedChange(option.value)}
-              >
-                <Text
-                  style={[
-                    styles.speedButtonText,
-                    playbackSpeed === option.value && styles.speedButtonTextActive,
-                  ]}
-                >
-                  {option.label}
-                </Text>
+          {/* Top Controls */}
+          {showControls && (
+            <View style={[styles.topControls, { paddingTop: Platform.OS === 'ios' ? 50 : 20 }]}>
+              <TouchableOpacity onPress={() => router.back()} style={styles.controlIcon}>
+                <Ionicons name="arrow-back" size={28} color="#FFF" />
               </TouchableOpacity>
-            ))}
-          </View>
-          <Text style={styles.speedHint}>
-            💡 Use 0.5x-0.75x to learn steps • Tap 🔄 to mirror video
-          </Text>
+              
+              <Text style={styles.videoTitle} numberOfLines={1}>{video.title}</Text>
+              
+              <View style={styles.topRightControls}>
+                <TouchableOpacity
+                  onPress={() => setIsMirrored(!isMirrored)}
+                  style={styles.controlIcon}
+                >
+                  <Ionicons
+                    name="sync"
+                    size={24}
+                    color={isMirrored ? "#FFD700" : "#FFF"}
+                  />
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={handleDelete} style={styles.controlIcon}>
+                  <Ionicons name="trash-outline" size={24} color="#FF6B6B" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+          {/* Center Play/Pause Button */}
+          {showControls && !status.isPlaying && (
+            <TouchableOpacity
+              style={styles.centerPlayButton}
+              onPress={handlePlayPause}
+            >
+              <Ionicons name="play-circle" size={80} color="rgba(255, 215, 0, 0.9)" />
+            </TouchableOpacity>
+          )}
+
+          {/* Bottom Controls */}
+          {showControls && (
+            <View style={styles.bottomControls}>
+              {/* Progress Bar */}
+              {status.durationMillis > 0 && (
+                <View style={styles.progressContainer}>
+                  <Text style={styles.timeText}>
+                    {formatTime(status.positionMillis || 0)}
+                  </Text>
+                  <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={1}
+                    value={(status.positionMillis || 0) / status.durationMillis}
+                    onSlidingComplete={handleSeek}
+                    onSlidingStart={() => {
+                      if (hideControlsTimeout.current) {
+                        clearTimeout(hideControlsTimeout.current);
+                      }
+                    }}
+                    minimumTrackTintColor="#FFD700"
+                    maximumTrackTintColor="rgba(255, 255, 255, 0.3)"
+                    thumbTintColor="#FFD700"
+                  />
+                  <Text style={styles.timeText}>
+                    {formatTime(status.durationMillis || 0)}
+                  </Text>
+                </View>
+              )}
+
+              {/* Playback Controls */}
+              <View style={styles.playbackControls}>
+                <TouchableOpacity onPress={handleRewind} style={styles.playbackButton}>
+                  <Ionicons name="play-back" size={32} color="#FFF" />
+                  <Text style={styles.rewindText}>5s</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={handlePlayPause} style={styles.mainPlayButton}>
+                  <Ionicons
+                    name={status.isPlaying ? 'pause' : 'play'}
+                    size={36}
+                    color="#FFF"
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={handleForward} style={styles.playbackButton}>
+                  <Ionicons name="play-forward" size={32} color="#FFF" />
+                  <Text style={styles.rewindText}>5s</Text>
+                </TouchableOpacity>
+
+                <View style={styles.spacer} />
+
+                <TouchableOpacity
+                  onPress={() => setShowSpeedPicker(true)}
+                  style={styles.speedButton}
+                >
+                  <Text style={styles.speedButtonText}>{playbackSpeed}x</Text>
+                  <Ionicons name="caret-down" size={16} color="#FFD700" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </View>
-      </View>
-    </SafeAreaView>
+      </TouchableWithoutFeedback>
+
+      {/* Speed Picker Modal */}
+      <Modal
+        visible={showSpeedPicker}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowSpeedPicker(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowSpeedPicker(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.speedPickerContainer}>
+              <Text style={styles.speedPickerTitle}>Playback Speed</Text>
+              {speedOptions.map((option) => (
+                <TouchableOpacity
+                  key={option.value}
+                  style={[
+                    styles.speedOption,
+                    playbackSpeed === option.value && styles.speedOptionActive,
+                  ]}
+                  onPress={() => handlePlaybackSpeedChange(option.value)}
+                >
+                  <Text
+                    style={[
+                      styles.speedOptionText,
+                      playbackSpeed === option.value && styles.speedOptionTextActive,
+                    ]}
+                  >
+                    {option.label}
+                  </Text>
+                  {playbackSpeed === option.value && (
+                    <Ionicons name="checkmark" size={20} color="#FFD700" />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a001a',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
-  backButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFD700',
-    textAlign: 'center',
-    marginHorizontal: 8,
-  },
-  headerButtons: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  iconButton: {
-    padding: 8,
+    backgroundColor: '#000',
   },
   videoContainer: {
-    width: width,
-    height: width * 9 / 16,
+    flex: 1,
     backgroundColor: '#000',
     position: 'relative',
   },
@@ -285,11 +372,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   loadingOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
@@ -300,113 +383,156 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 14,
   },
-  infoSection: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
+  topControls: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    backgroundColor: 'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)',
+  },
+  controlIcon: {
+    padding: 8,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 20,
   },
   videoTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  videoDescription: {
-    fontSize: 14,
-    color: '#999',
-    lineHeight: 20,
-  },
-  controlsContainer: {
     flex: 1,
-    padding: 16,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFF',
+    marginHorizontal: 12,
+  },
+  topRightControls: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  centerPlayButton: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginLeft: -40,
+    marginTop: -40,
+  },
+  bottomControls: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 16,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 16,
+    paddingTop: 16,
+    backgroundColor: 'rgba(0,0,0,0.8)',
   },
   progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 16,
   },
   slider: {
     flex: 1,
-    marginHorizontal: 12,
+    marginHorizontal: 8,
+    height: 40,
   },
   timeText: {
-    fontSize: 12,
-    color: '#999',
-    width: 40,
+    fontSize: 13,
+    color: '#FFF',
+    width: 45,
+    textAlign: 'center',
   },
-  playbackButtons: {
+  playbackControls: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 32,
-    gap: 24,
+    gap: 32,
   },
-  controlButton: {
+  playbackButton: {
+    alignItems: 'center',
+    position: 'relative',
+  },
+  rewindText: {
+    fontSize: 10,
+    color: '#FFD700',
+    position: 'absolute',
+    bottom: -2,
+    fontWeight: 'bold',
+  },
+  mainPlayButton: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#1a0033',
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#FFD700',
   },
-  playButton: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: '#FFD700',
-    alignItems: 'center',
-    justifyContent: 'center',
+  spacer: {
+    flex: 1,
   },
-  speedSection: {
+  speedButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#FFD700',
+    gap: 4,
+  },
+  speedButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  speedPickerContainer: {
     backgroundColor: '#1a0033',
     borderRadius: 16,
     padding: 20,
-    borderWidth: 1,
-    borderColor: '#333',
+    width: '80%',
+    maxWidth: 300,
+    borderWidth: 2,
+    borderColor: '#FFD700',
   },
-  speedLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+  speedPickerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#FFD700',
     marginBottom: 16,
     textAlign: 'center',
   },
-  speedButtons: {
+  speedOption: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-    justifyContent: 'center',
-  },
-  speedButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 20,
-    backgroundColor: '#0a001a',
-    borderWidth: 2,
-    borderColor: '#333',
-    minWidth: 70,
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+    backgroundColor: 'rgba(255, 215, 0, 0.05)',
   },
-  speedButtonActive: {
+  speedOptionActive: {
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    borderWidth: 1,
     borderColor: '#FFD700',
-    backgroundColor: '#FFD700',
   },
-  speedButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#999',
+  speedOptionText: {
+    fontSize: 16,
+    color: '#CCC',
   },
-  speedButtonTextActive: {
-    color: '#1a0033',
-  },
-  speedHint: {
-    fontSize: 12,
-    color: '#999',
-    textAlign: 'center',
-    marginTop: 12,
-    lineHeight: 18,
+  speedOptionTextActive: {
+    color: '#FFD700',
+    fontWeight: 'bold',
   },
   errorText: {
     fontSize: 16,
