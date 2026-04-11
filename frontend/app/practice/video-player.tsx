@@ -25,7 +25,7 @@ export default function VideoPlayerScreen() {
   const video = videoData ? JSON.parse(String(videoData)) : null;
   
   const videoRef = useRef<Video>(null);
-  const hideControlsTimeout = useRef<NodeJS.Timeout | null>(null);
+  const hideControlsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const [status, setStatus] = useState<any>({});
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
