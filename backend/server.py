@@ -1,6 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException, File, UploadFile
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
@@ -11,9 +12,15 @@ import uuid
 from datetime import datetime, timedelta
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 import base64
+import shutil
+
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+# Create uploads directory
+UPLOAD_DIR = ROOT_DIR / "uploads" / "videos"
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -77,7 +84,8 @@ class TeacherVideo(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
     description: Optional[str] = None
-    video_base64: str
+    video_url: str  # Changed from video_base64 to video_url
+    file_size_mb: Optional[float] = None
     difficulty_level: str  # "beginner", "intermediate", "advanced"
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -234,14 +242,72 @@ async def get_theory_content_by_id(content_id: str):
 # Teacher Videos
 @api_router.post("/teacher-videos", response_model=TeacherVideo)
 async def create_teacher_video(video: TeacherVideoCreate):
-    video_obj = TeacherVideo(**video.dict())
-    await db.teacher_videos.insert_one(video_obj.dict())
-    return video_obj
+    """Save teacher video to file system instead of database"""
+    try:
+        # Generate unique filename
+        video_id = str(uuid.uuid4())
+        filename = f"{video_id}.mp4"
+        filepath = UPLOAD_DIR / filename
+        
+        # Decode base64 and save to file
+        if video.video_base64.startswith('data:'):
+            # Remove data URL prefix
+            base64_data = video.video_base64.split(',')[1]
+        else:
+            base64_data = video.video_base64
+        
+        video_bytes = base64.b64decode(base64_data)
+        
+        # Save to file
+        with open(filepath, 'wb') as f:
+            f.write(video_bytes)
+        
+        # Calculate file size
+        file_size_mb = len(video_bytes) / (1024 * 1024)
+        
+        # Create video object with file URL instead of base64
+        video_obj = TeacherVideo(
+            id=video_id,
+            title=video.title,
+            description=video.description,
+            video_url=f"/uploads/videos/{filename}",
+            file_size_mb=round(file_size_mb, 2),
+            difficulty_level=video.difficulty_level,
+        )
+        
+        await db.teacher_videos.insert_one(video_obj.dict())
+        return video_obj
+    except Exception as e:
+        logger.error(f"Error saving video: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to save video: {str(e)}")
 
 @api_router.get("/teacher-videos", response_model=List[TeacherVideo])
 async def get_teacher_videos():
     videos = await db.teacher_videos.find().sort("created_at", -1).to_list(100)
     return [TeacherVideo(**video) for video in videos]
+
+@api_router.delete("/teacher-videos/{video_id}")
+async def delete_teacher_video(video_id: str):
+    """Delete video from both database and file system"""
+    video = await db.teacher_videos.find_one({"id": video_id})
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    # Delete file from file system
+    try:
+        filename = video['video_url'].split('/')[-1]
+        filepath = UPLOAD_DIR / filename
+        if filepath.exists():
+            filepath.unlink()
+    except Exception as e:
+        logger.error(f"Error deleting video file: {str(e)}")
+    
+    # Delete from database
+    result = await db.teacher_videos.delete_one({"id": video_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Video not found in database")
+    
+    return {"message": "Video deleted successfully"}
 
 # Music Tracks
 @api_router.post("/music-tracks", response_model=MusicTrack)
@@ -424,6 +490,9 @@ async def get_statistics():
 
 # Include the router in the main app
 app.include_router(api_router)
+
+# Mount uploads directory for serving video files
+app.mount("/uploads", StaticFiles(directory=str(ROOT_DIR / "uploads")), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,

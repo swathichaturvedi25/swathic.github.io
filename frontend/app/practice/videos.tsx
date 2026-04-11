@@ -74,13 +74,13 @@ export default function TeacherVideosScreen() {
           if (fileInfo.exists && 'size' in fileInfo && fileInfo.size) {
             const fileSizeMB = fileInfo.size / (1024 * 1024);
             
-            if (fileSizeMB > 10) {
+            if (fileSizeMB > 50) {
               Alert.alert(
                 'File Too Large',
                 `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
-                `Maximum size: 10MB\n\n` +
+                `Maximum size: 50MB\n\n` +
                 `Tips to reduce size:\n` +
-                `• Record shorter videos (1-2 minutes)\n` +
+                `• Keep videos under 30 seconds\n` +
                 `• Use lower quality recording\n` +
                 `• Trim the video before uploading\n` +
                 `• Use a video compressor app`,
@@ -89,7 +89,7 @@ export default function TeacherVideosScreen() {
               return;
             }
             
-            if (fileSizeMB > 5) {
+            if (fileSizeMB > 30) {
               Alert.alert(
                 'Large File',
                 `Video size: ${fileSizeMB.toFixed(1)}MB\n\n` +
@@ -179,9 +179,17 @@ export default function TeacherVideosScreen() {
   };
 
   const playVideo = (video: any) => {
+    // Convert video_url to full URL
+    const videoWithFullUrl = {
+      ...video,
+      video_base64: video.video_url.startsWith('http') 
+        ? video.video_url 
+        : `${process.env.EXPO_PUBLIC_BACKEND_URL}${video.video_url}`
+    };
+    
     router.push({
       pathname: '/practice/video-player',
-      params: { videoData: JSON.stringify(video) },
+      params: { videoData: JSON.stringify(videoWithFullUrl) },
     });
   };
 
@@ -214,7 +222,7 @@ export default function TeacherVideosScreen() {
               Upload your teacher's videos and watch them at slower speeds to learn step-by-step
             </Text>
             <Text style={styles.sizeHint}>
-              💡 Maximum video size: 10MB • Recommended: 1-2 minute clips
+              💡 Maximum: 50MB & 30 seconds • Best for learning specific moves
             </Text>
           </View>
         </View>
