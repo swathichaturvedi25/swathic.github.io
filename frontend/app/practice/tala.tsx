@@ -82,6 +82,12 @@ const ADDITIONAL_TERMS = [
 ];
 
 // The four Talas with Shastriya Parichay
+type DharanaByLaya = {
+  VL: string;
+  ML: string;
+  DL: string;
+};
+
 type TalaItem = {
   name: string;
   jati: string;
@@ -89,6 +95,7 @@ type TalaItem = {
   bhaga: number;
   chanda?: string;
   dharana: string;
+  dharanaByLaya?: DharanaByLaya;
 };
 
 const TALAS: TalaItem[] = [
@@ -97,7 +104,12 @@ const TALAS: TalaItem[] = [
     jati: 'Chaturashra Jathi',
     mathra: 4,
     bhaga: 1,
-    dharana: 'II dha gadi naka dini II',
+    dharana: '|| dha gadi naka dini ||',
+    dharanaByLaya: {
+      VL: '|| dha gadi naka dini ||',
+      ML: '|| dha gadi |naka dini|| dha gadi |naka dini ||',
+      DL: '|| dha gadi naka dini | dha gadi naka dini | dha gadi naka dini | dha gadi naka dini ||',
+    },
   },
   {
     name: 'Roopak Tala',
@@ -105,7 +117,12 @@ const TALAS: TalaItem[] = [
     mathra: 6,
     bhaga: 2,
     chanda: '2 + 4',
-    dharana: 'II dha kadatak I\nDha kadatak thin dha II',
+    dharana: '|| dha kadatak dha kadatak thin dha ||',
+    dharanaByLaya: {
+      VL: '|| dha kadatak dha kadatak thin dha ||',
+      ML: '|| dha kadatak | dha kadatak | thin dha | dha kadatak | dha kadatak | thin dha ||',
+      DL: '|| dha kadatak dha kadatak | thin dha dha kadatak | dha kadatak thin dha | dha kadatak dha kadatak | thin dha dha kadatak | dha kadatak thin dha ||',
+    },
   },
   {
     name: 'Triputa Tala',
@@ -113,7 +130,7 @@ const TALAS: TalaItem[] = [
     mathra: 7,
     bhaga: 3,
     chanda: '3 + 2 + 2',
-    dharana: 'II dhei thatin Dhaka I\nThantin Dhakal\nThatin Dhaka II',
+    dharana: '|| dhei thatin Dhaka |\nThantin Dhakal\nThatin Dhaka ||',
   },
   {
     name: 'Kemta Tala',
@@ -121,7 +138,7 @@ const TALAS: TalaItem[] = [
     mathra: 6,
     bhaga: 2,
     chanda: '3 + 3',
-    dharana: 'II dha Dina kita I\nNa thina kita II',
+    dharana: '|| dha Dina kita |\nNa thina kita ||',
   },
 ];
 
@@ -131,6 +148,7 @@ export default function TalaScreen() {
   const [expandedTala, setExpandedTala] = useState<number | null>(0);
   const [showTerms, setShowTerms] = useState(false);
   const [showMana, setShowMana] = useState(false);
+  const [selectedLaya, setSelectedLaya] = useState<Record<number, 'VL' | 'ML' | 'DL'>>({});
 
   const toggleTala = (index: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -171,15 +189,19 @@ export default function TalaScreen() {
             </Text>
             <View style={styles.layaTypes}>
               <View style={styles.layaChip}>
-                <Text style={styles.layaChipText}>Vilambita Laya</Text>
+                <Text style={styles.layaChipText}>Vilambita</Text>
                 <Text style={styles.layaChipSub}>Slow</Text>
               </View>
               <View style={styles.layaChip}>
-                <Text style={styles.layaChipText}>Druth Laya</Text>
+                <Text style={styles.layaChipText}>Madhyama</Text>
+                <Text style={styles.layaChipSub}>Medium</Text>
+              </View>
+              <View style={styles.layaChip}>
+                <Text style={styles.layaChipText}>Druth</Text>
                 <Text style={styles.layaChipSub}>Fast</Text>
               </View>
               <View style={styles.layaChip}>
-                <Text style={styles.layaChipText}>Athidruth Laya</Text>
+                <Text style={styles.layaChipText}>Athidruth</Text>
                 <Text style={styles.layaChipSub}>Very Fast</Text>
               </View>
             </View>
@@ -322,9 +344,36 @@ export default function TalaScreen() {
                     )}
                     <View style={styles.dharanaSection}>
                       <Text style={styles.dharanaLabel}>DHARANA</Text>
-                      <View style={styles.dharanaBox}>
-                        <Text style={styles.dharanaText}>{tala.dharana}</Text>
-                      </View>
+                      {tala.dharanaByLaya ? (
+                        <View>
+                          <View style={styles.layaTabs}>
+                            {(['VL', 'ML', 'DL'] as const).map((laya) => {
+                              const currentLaya = selectedLaya[index] || 'VL';
+                              const isActive = currentLaya === laya;
+                              const layaLabels = { VL: 'Vilambita', ML: 'Madhyama', DL: 'Druth' };
+                              return (
+                                <TouchableOpacity
+                                  key={laya}
+                                  style={[styles.layaTab, isActive && styles.layaTabActive]}
+                                  onPress={() => setSelectedLaya({ ...selectedLaya, [index]: laya })}
+                                >
+                                  <Text style={[styles.layaTabLabel, isActive && styles.layaTabLabelActive]}>{laya}</Text>
+                                  <Text style={[styles.layaTabSub, isActive && styles.layaTabSubActive]}>{layaLabels[laya]}</Text>
+                                </TouchableOpacity>
+                              );
+                            })}
+                          </View>
+                          <View style={styles.dharanaBox}>
+                            <Text style={styles.dharanaText}>
+                              {tala.dharanaByLaya[selectedLaya[index] || 'VL']}
+                            </Text>
+                          </View>
+                        </View>
+                      ) : (
+                        <View style={styles.dharanaBox}>
+                          <Text style={styles.dharanaText}>{tala.dharana}</Text>
+                        </View>
+                      )}
                     </View>
                   </View>
                 )}
@@ -727,6 +776,42 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontStyle: 'italic',
     textAlign: 'center',
+  },
+  // Laya Tabs
+  layaTabs: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    gap: 8,
+  },
+  layaTab: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 6,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.15)',
+  },
+  layaTabActive: {
+    backgroundColor: '#FFD700',
+    borderColor: '#FFD700',
+  },
+  layaTabLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+  layaTabLabelActive: {
+    color: '#1a0033',
+  },
+  layaTabSub: {
+    fontSize: 10,
+    color: '#999',
+    marginTop: 1,
+  },
+  layaTabSubActive: {
+    color: '#1a0033',
   },
   practiceNote: {
     flexDirection: 'row',
