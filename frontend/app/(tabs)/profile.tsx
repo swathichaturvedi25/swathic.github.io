@@ -119,7 +119,7 @@ export default function ProfileScreen() {
               style={styles.addButton}
               onPress={() => setModalVisible(true)}
             >
-              <Ionicons name="add-circle" size={24} color="#ff2d1f" />
+              <Ionicons name="add-circle" size={24} color="#ffd21f" />
             </TouchableOpacity>
           </View>
 
@@ -133,7 +133,7 @@ export default function ProfileScreen() {
                   <Ionicons
                     name={goal.completed ? 'checkmark-circle' : 'ellipse-outline'}
                     size={28}
-                    color={goal.completed ? '#4CAF50' : '#ff2d1f'}
+                    color={goal.completed ? '#4CAF50' : '#ffd21f'}
                   />
                 </TouchableOpacity>
                 <View style={styles.goalContent}>
@@ -187,7 +187,7 @@ export default function ProfileScreen() {
             quizResults.map((result) => (
               <View key={result.id} style={styles.quizCard}>
                 <View style={styles.quizIcon}>
-                  <Ionicons name="trophy" size={24} color="#ff2d1f" />
+                  <Ionicons name="trophy" size={24} color="#ffd21f" />
                 </View>
                 <View style={styles.quizContent}>
                   <Text style={styles.quizType}>{result.quiz_type}</Text>
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#ff2d1f',
+    color: '#ffd21f',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ff2d1f',
+    color: '#ffd21f',
     marginBottom: 16,
   },
   addButton: {
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   quizPercentage: {
-    backgroundColor: '#ff2d1f',
+    backgroundColor: '#ffd21f',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ff2d1f',
+    color: '#ffd21f',
   },
   input: {
     backgroundColor: '#050010',
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   createButton: {
-    backgroundColor: '#ff2d1f',
+    backgroundColor: '#ffd21f',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',

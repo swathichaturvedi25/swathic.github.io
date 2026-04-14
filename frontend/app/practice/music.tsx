@@ -20,7 +20,7 @@ export default function MusicScreen() {
       description: 'Rhythmic cycles, Laya & Mardala patterns',
       icon: 'metronome-outline' as const,
       fallbackIcon: 'pulse' as const,
-      color: '#ff2d1f',
+      color: '#ffd21f',
       route: '/practice/tala',
     },
   ];
@@ -29,7 +29,7 @@ export default function MusicScreen() {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#ff2d1f" />
+          <Ionicons name="arrow-back" size={24} color="#ffd21f" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Music</Text>
         <View style={styles.placeholder} />
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ff2d1f',
+    color: '#ffd21f',
   },
   placeholder: {
     width: 40,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#ff2d1f',
+    color: '#ffd21f',
     marginBottom: 8,
   },
   introText: {

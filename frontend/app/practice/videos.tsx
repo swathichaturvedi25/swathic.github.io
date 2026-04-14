@@ -213,17 +213,17 @@ export default function TeacherVideosScreen() {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#ff2d1f" />
+          <Ionicons name="arrow-back" size={24} color="#ffd21f" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Teacher Videos</Text>
         <TouchableOpacity onPress={pickVideo} style={styles.uploadButton}>
-          <Ionicons name="add-circle" size={28} color="#ff2d1f" />
+          <Ionicons name="add-circle" size={28} color="#ffd21f" />
         </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.description}>
-          <Ionicons name="information-circle" size={20} color="#ff2d1f" />
+          <Ionicons name="information-circle" size={20} color="#ffd21f" />
           <View style={{ flex: 1 }}>
             <Text style={styles.descriptionText}>
               Upload your teacher's videos and watch them at slower speeds to learn step-by-step
@@ -235,7 +235,7 @@ export default function TeacherVideosScreen() {
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color="#ff2d1f" style={{ marginTop: 40 }} />
+          <ActivityIndicator size="large" color="#ffd21f" style={{ marginTop: 40 }} />
         ) : videos.length > 0 ? (
           <View style={styles.videosContainer}>
             {videos.map((video) => (
@@ -245,7 +245,7 @@ export default function TeacherVideosScreen() {
                   onPress={() => playVideo(video)}
                 >
                   <View style={styles.videoThumbnail}>
-                    <Ionicons name="play-circle" size={48} color="#ff2d1f" />
+                    <Ionicons name="play-circle" size={48} color="#ffd21f" />
                   </View>
                   <View style={styles.videoInfo}>
                     <Text style={styles.videoTitle}>{video.title}</Text>
@@ -319,7 +319,7 @@ export default function TeacherVideosScreen() {
 
             {selectedVideoUri && (
               <View style={styles.videoPreview}>
-                <Ionicons name="videocam" size={40} color="#ff2d1f" />
+                <Ionicons name="videocam" size={40} color="#ffd21f" />
                 <Text style={styles.videoSelectedText}>Video selected</Text>
               </View>
             )}
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ff2d1f',
+    color: '#ffd21f',
   },
   uploadButton: {
     padding: 8,
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ff2d1f',
+    color: '#ffd21f',
   },
   videoPreview: {
     alignItems: 'center',
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   },
   videoSelectedText: {
     fontSize: 14,
-    color: '#ff2d1f',
+    color: '#ffd21f',
     marginTop: 8,
   },
   input: {
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
   },
   uploadButtonLarge: {
     flexDirection: 'row',
-    backgroundColor: '#ff2d1f',
+    backgroundColor: '#ffd21f',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
   },
   uploadingText: {
     fontSize: 14,
-    color: '#ff2d1f',
+    color: '#ffd21f',
     textAlign: 'center',
     marginTop: 12,
   },
