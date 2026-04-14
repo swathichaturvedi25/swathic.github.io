@@ -467,11 +467,11 @@ export default function HastaBhedaScreen() {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#f999de" />
+          <Ionicons name="arrow-back" size={24} color="#ff1fa9" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Hasta Bheda</Text>
         <TouchableOpacity onPress={() => setShowFingerInfo(true)} style={styles.infoButton}>
-          <Ionicons name="hand-left" size={24} color="#f999de" />
+          <Ionicons name="hand-left" size={24} color="#ff1fa9" />
         </TouchableOpacity>
       </View>
 
@@ -549,13 +549,13 @@ export default function HastaBhedaScreen() {
           >
             <View style={styles.categoryShlokaHeader}>
               <View style={styles.categoryShlokaLabelRow}>
-                <Ionicons name="book-outline" size={18} color="#f999de" />
+                <Ionicons name="book-outline" size={18} color="#ff1fa9" />
                 <Text style={styles.categoryShlokaLabel}>Shloka</Text>
               </View>
               <Ionicons
                 name={showCategoryShloka ? 'chevron-up' : 'chevron-down'}
                 size={20}
-                color="#f999de"
+                color="#ff1fa9"
               />
             </View>
             {showCategoryShloka && (
@@ -606,7 +606,7 @@ export default function HastaBhedaScreen() {
                       <Ionicons
                         name={isExpanded ? 'chevron-up' : 'book-outline'}
                         size={16}
-                        color="#f999de"
+                        color="#ff1fa9"
                       />
                     </View>
                   )}
@@ -614,7 +614,7 @@ export default function HastaBhedaScreen() {
                 {isExpanded && hasta.shloka && (
                   <View style={styles.hastaShlokaSection}>
                     <View style={styles.hastaShlokaLabelRow}>
-                      <Ionicons name="musical-note" size={14} color="#f999de" />
+                      <Ionicons name="musical-note" size={14} color="#ff1fa9" />
                       <Text style={styles.hastaShlokaTitle}>Viniyoga Shloka</Text>
                     </View>
                     <Text style={styles.hastaShlokaSanskrit}>{hasta.shloka}</Text>
@@ -633,7 +633,7 @@ export default function HastaBhedaScreen() {
 
         {/* Practice Note */}
         <View style={styles.practiceNote}>
-          <Ionicons name="bulb-outline" size={24} color="#f999de" />
+          <Ionicons name="bulb-outline" size={24} color="#ff1fa9" />
           <Text style={styles.practiceNoteText}>
             Understanding the dance mudras and executing them correctly is a part of building yourself as a powerful performer. Each finger in our hand plays an important role in reciting the story of dance.
           </Text>
@@ -654,7 +654,7 @@ export default function HastaBhedaScreen() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Finger Names in Sanskrit</Text>
               <TouchableOpacity onPress={() => setShowFingerInfo(false)}>
-                <Ionicons name="close-circle" size={32} color="#f999de" />
+                <Ionicons name="close-circle" size={32} color="#ff1fa9" />
               </TouchableOpacity>
             </View>
 
@@ -676,7 +676,7 @@ export default function HastaBhedaScreen() {
               ))}
 
               <View style={styles.modalNote}>
-                <Ionicons name="sparkles" size={20} color="#f999de" />
+                <Ionicons name="sparkles" size={20} color="#ff1fa9" />
                 <Text style={styles.modalNoteText}>
                   Mastering the proper finger positions is essential for authentic Odissi Hasta Bheda!
                 </Text>
@@ -712,7 +712,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   scrollView: {
     flex: 1,
@@ -724,7 +724,7 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 16,
   },
   shlokaIntroBox: {
@@ -732,26 +732,26 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.3)',
+    borderColor: 'rgba(255, 31, 169, 0.3)',
   },
   shlokaLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#f999de',
+    color: '#ff1fa9',
     letterSpacing: 1.5,
     textTransform: 'uppercase',
     marginBottom: 12,
   },
   introShlokaSanskrit: {
     fontSize: 15,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 26,
     fontStyle: 'italic',
     fontWeight: '500',
   },
   shlokaTransDivider: {
     height: 1,
-    backgroundColor: 'rgba(249, 153, 222, 0.2)',
+    backgroundColor: 'rgba(255, 31, 169, 0.2)',
     marginVertical: 12,
   },
   introQuote: {
@@ -785,8 +785,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   categoryChipActive: {
-    backgroundColor: '#f999de',
-    borderColor: '#f999de',
+    backgroundColor: '#ff1fa9',
+    borderColor: '#ff1fa9',
   },
   categoryText: {
     fontSize: 13,
@@ -800,7 +800,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: 'rgba(249, 153, 222, 0.2)',
+    backgroundColor: 'rgba(255, 31, 169, 0.2)',
   },
   countBadgeActive: {
     backgroundColor: '#0d0015',
@@ -808,10 +808,10 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   countTextActive: {
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   descriptionBox: {
     marginHorizontal: 16,
@@ -820,7 +820,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0d0015',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#f999de',
+    borderColor: '#ff1fa9',
   },
   descriptionText: {
     fontSize: 14,
@@ -831,10 +831,10 @@ const styles = StyleSheet.create({
   categoryShlokaButton: {
     marginHorizontal: 16,
     marginBottom: 24,
-    backgroundColor: 'rgba(249, 153, 222, 0.06)',
+    backgroundColor: 'rgba(255, 31, 169, 0.06)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.25)',
+    borderColor: 'rgba(255, 31, 169, 0.25)',
     overflow: 'hidden',
   },
   categoryShlokaHeader: {
@@ -851,7 +851,7 @@ const styles = StyleSheet.create({
   categoryShlokaLabel: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   categoryShlokaContent: {
     paddingHorizontal: 14,
@@ -859,7 +859,7 @@ const styles = StyleSheet.create({
   },
   categoryShlokaSanskrit: {
     fontSize: 14,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 24,
     fontStyle: 'italic',
     fontWeight: '500',
@@ -877,7 +877,7 @@ const styles = StyleSheet.create({
   listTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 16,
   },
   hastaCard: {
@@ -889,10 +889,10 @@ const styles = StyleSheet.create({
     borderColor: '#333',
   },
   hastaCardWithShloka: {
-    borderColor: 'rgba(249, 153, 222, 0.2)',
+    borderColor: 'rgba(255, 31, 169, 0.2)',
   },
   hastaCardExpanded: {
-    borderColor: '#f999de',
+    borderColor: '#ff1fa9',
     backgroundColor: '#150020',
   },
   hastaMainRow: {
@@ -903,7 +903,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f999de',
+    backgroundColor: '#ff1fa9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
@@ -930,7 +930,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: 'rgba(249, 153, 222, 0.12)',
+    backgroundColor: 'rgba(255, 31, 169, 0.12)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -939,7 +939,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     paddingTop: 14,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(249, 153, 222, 0.15)',
+    borderTopColor: 'rgba(255, 31, 169, 0.15)',
   },
   hastaShlokaLabelRow: {
     flexDirection: 'row',
@@ -950,20 +950,20 @@ const styles = StyleSheet.create({
   hastaShlokaTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#f999de',
+    color: '#ff1fa9',
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   hastaShlokaSanskrit: {
     fontSize: 14,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 24,
     fontStyle: 'italic',
     fontWeight: '500',
   },
   shlokaTransDividerSmall: {
     height: 1,
-    backgroundColor: 'rgba(249, 153, 222, 0.15)',
+    backgroundColor: 'rgba(255, 31, 169, 0.15)',
     marginVertical: 10,
   },
   hastaShlokaTranslation: {
@@ -975,19 +975,19 @@ const styles = StyleSheet.create({
   practiceNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'rgba(249, 153, 222, 0.1)',
+    backgroundColor: 'rgba(255, 31, 169, 0.1)',
     marginHorizontal: 16,
     marginTop: 24,
     padding: 16,
     borderRadius: 12,
     gap: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.3)',
+    borderColor: 'rgba(255, 31, 169, 0.3)',
   },
   practiceNoteText: {
     flex: 1,
     fontSize: 14,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 20,
   },
   modalOverlay: {
@@ -1003,7 +1003,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderLeftWidth: 2,
     borderRightWidth: 2,
-    borderColor: '#f999de',
+    borderColor: '#ff1fa9',
   },
   modalHeader: {
     flexDirection: 'row',
@@ -1016,7 +1016,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   modalScroll: {
     padding: 20,
@@ -1030,18 +1030,18 @@ const styles = StyleSheet.create({
   fingerCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(249, 153, 222, 0.05)',
+    backgroundColor: 'rgba(255, 31, 169, 0.05)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.2)',
+    borderColor: 'rgba(255, 31, 169, 0.2)',
   },
   fingerNumber: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#f999de',
+    backgroundColor: '#ff1fa9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -1057,7 +1057,7 @@ const styles = StyleSheet.create({
   fingerName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 4,
   },
   fingerMeaning: {
@@ -1067,18 +1067,18 @@ const styles = StyleSheet.create({
   modalNote: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(249, 153, 222, 0.1)',
+    backgroundColor: 'rgba(255, 31, 169, 0.1)',
     padding: 14,
     borderRadius: 12,
     gap: 10,
     marginTop: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.3)',
+    borderColor: 'rgba(255, 31, 169, 0.3)',
   },
   modalNoteText: {
     flex: 1,
     fontSize: 13,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 18,
   },
 });

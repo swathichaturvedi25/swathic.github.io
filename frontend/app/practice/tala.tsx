@@ -174,11 +174,11 @@ export default function TalaScreen() {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#f999de" />
+          <Ionicons name="arrow-back" size={24} color="#ff1fa9" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Tala</Text>
         <TouchableOpacity onPress={() => setShowFingerInfo(true)} style={styles.infoButton}>
-          <Ionicons name="hand-left" size={24} color="#f999de" />
+          <Ionicons name="hand-left" size={24} color="#ff1fa9" />
         </TouchableOpacity>
       </View>
 
@@ -225,10 +225,10 @@ export default function TalaScreen() {
           activeOpacity={0.7}
         >
           <View style={styles.sectionToggleRow}>
-            <Ionicons name="book-outline" size={18} color="#f999de" />
+            <Ionicons name="book-outline" size={18} color="#ff1fa9" />
             <Text style={styles.sectionToggleText}>Words Used in Tala</Text>
           </View>
-          <Ionicons name={showTerms ? 'chevron-up' : 'chevron-down'} size={20} color="#f999de" />
+          <Ionicons name={showTerms ? 'chevron-up' : 'chevron-down'} size={20} color="#ff1fa9" />
         </TouchableOpacity>
 
         {showTerms && (
@@ -257,10 +257,10 @@ export default function TalaScreen() {
           activeOpacity={0.7}
         >
           <View style={styles.sectionToggleRow}>
-            <Ionicons name="layers-outline" size={18} color="#f999de" />
+            <Ionicons name="layers-outline" size={18} color="#ff1fa9" />
             <Text style={styles.sectionToggleText}>Mana & Other Terms</Text>
           </View>
-          <Ionicons name={showMana ? 'chevron-up' : 'chevron-down'} size={20} color="#f999de" />
+          <Ionicons name={showMana ? 'chevron-up' : 'chevron-down'} size={20} color="#ff1fa9" />
         </TouchableOpacity>
 
         {showMana && (
@@ -328,7 +328,7 @@ export default function TalaScreen() {
                   <Ionicons
                     name={isExpanded ? 'chevron-up' : 'chevron-down'}
                     size={20}
-                    color="#f999de"
+                    color="#ff1fa9"
                   />
                 </View>
 
@@ -393,7 +393,7 @@ export default function TalaScreen() {
         </View>
 
         <View style={styles.practiceNote}>
-          <Ionicons name="bulb-outline" size={24} color="#f999de" />
+          <Ionicons name="bulb-outline" size={24} color="#ff1fa9" />
           <Text style={styles.practiceNoteText}>
             Mastering Tala is essential for any Odissi dancer. Practice counting the mathra in each Tala while reciting the Dharana to build rhythm.
           </Text>
@@ -414,7 +414,7 @@ export default function TalaScreen() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Finger Names in Sanskrit</Text>
               <TouchableOpacity onPress={() => setShowFingerInfo(false)}>
-                <Ionicons name="close-circle" size={32} color="#f999de" />
+                <Ionicons name="close-circle" size={32} color="#ff1fa9" />
               </TouchableOpacity>
             </View>
 
@@ -436,7 +436,7 @@ export default function TalaScreen() {
               ))}
 
               <View style={styles.modalNote}>
-                <Ionicons name="sparkles" size={20} color="#f999de" />
+                <Ionicons name="sparkles" size={20} color="#ff1fa9" />
                 <Text style={styles.modalNoteText}>
                   Proper finger positioning is used to count and keep time in Tala practice!
                 </Text>
@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   scrollView: {
     flex: 1,
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 16,
   },
   definitionBox: {
@@ -494,12 +494,12 @@ const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.3)',
+    borderColor: 'rgba(255, 31, 169, 0.3)',
   },
   definitionLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#f999de',
+    color: '#ff1fa9',
     letterSpacing: 1.5,
     textTransform: 'uppercase',
     marginBottom: 8,
@@ -516,18 +516,18 @@ const styles = StyleSheet.create({
   },
   layaChip: {
     flex: 1,
-    backgroundColor: 'rgba(249, 153, 222, 0.08)',
+    backgroundColor: 'rgba(255, 31, 169, 0.08)',
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 8,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.2)',
+    borderColor: 'rgba(255, 31, 169, 0.2)',
   },
   layaChipText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#f999de',
+    color: '#ff1fa9',
     textAlign: 'center',
   },
   layaChipSub: {
@@ -544,10 +544,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 4,
     padding: 14,
-    backgroundColor: 'rgba(249, 153, 222, 0.06)',
+    backgroundColor: 'rgba(255, 31, 169, 0.06)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.25)',
+    borderColor: 'rgba(255, 31, 169, 0.25)',
   },
   sectionToggleRow: {
     flexDirection: 'row',
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   sectionToggleText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   // Terms Section
   termsSection: {
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#f999de',
+    backgroundColor: '#ff1fa9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -595,7 +595,7 @@ const styles = StyleSheet.create({
   termName: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 4,
   },
   termDef: {
@@ -616,7 +616,7 @@ const styles = StyleSheet.create({
   manaIntroTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 4,
   },
   manaIntroText: {
@@ -627,18 +627,18 @@ const styles = StyleSheet.create({
   manaCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(249, 153, 222, 0.05)',
+    backgroundColor: 'rgba(255, 31, 169, 0.05)',
     borderRadius: 10,
     padding: 12,
     marginBottom: 6,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.15)',
+    borderColor: 'rgba(255, 31, 169, 0.15)',
   },
   manaLetter: {
     width: 28,
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     textAlign: 'center',
   },
   manaContent: {
@@ -664,7 +664,7 @@ const styles = StyleSheet.create({
   talasTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   talasSubtitle: {
     fontSize: 14,
@@ -684,7 +684,7 @@ const styles = StyleSheet.create({
     borderColor: '#333',
   },
   talaCardExpanded: {
-    borderColor: '#f999de',
+    borderColor: '#ff1fa9',
     backgroundColor: '#150020',
   },
   talaMainRow: {
@@ -695,7 +695,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f999de',
+    backgroundColor: '#ff1fa9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
   talaMathraBadge: {
     alignItems: 'center',
     marginRight: 8,
-    backgroundColor: 'rgba(249, 153, 222, 0.1)',
+    backgroundColor: 'rgba(255, 31, 169, 0.1)',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -729,7 +729,7 @@ const styles = StyleSheet.create({
   talaMathraText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   talaMathraLabel: {
     fontSize: 9,
@@ -741,7 +741,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(249, 153, 222, 0.15)',
+    borderTopColor: 'rgba(255, 31, 169, 0.15)',
   },
   talaDetailRow: {
     flexDirection: 'row',
@@ -767,21 +767,21 @@ const styles = StyleSheet.create({
   dharanaLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#f999de',
+    color: '#ff1fa9',
     letterSpacing: 1.5,
     textTransform: 'uppercase',
     marginBottom: 8,
   },
   dharanaBox: {
-    backgroundColor: 'rgba(249, 153, 222, 0.08)',
+    backgroundColor: 'rgba(255, 31, 169, 0.08)',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.25)',
+    borderColor: 'rgba(255, 31, 169, 0.25)',
   },
   dharanaText: {
     fontSize: 16,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 28,
     fontWeight: '600',
     fontStyle: 'italic',
@@ -801,16 +801,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.15)',
+    borderColor: 'rgba(255, 31, 169, 0.15)',
   },
   layaTabActive: {
-    backgroundColor: '#f999de',
-    borderColor: '#f999de',
+    backgroundColor: '#ff1fa9',
+    borderColor: '#ff1fa9',
   },
   layaTabLabel: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   layaTabLabelActive: {
     color: '#0d0015',
@@ -826,19 +826,19 @@ const styles = StyleSheet.create({
   practiceNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'rgba(249, 153, 222, 0.1)',
+    backgroundColor: 'rgba(255, 31, 169, 0.1)',
     marginHorizontal: 16,
     marginTop: 24,
     padding: 16,
     borderRadius: 12,
     gap: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.3)',
+    borderColor: 'rgba(255, 31, 169, 0.3)',
   },
   practiceNoteText: {
     flex: 1,
     fontSize: 14,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 20,
   },
   // Modal
@@ -855,7 +855,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderLeftWidth: 2,
     borderRightWidth: 2,
-    borderColor: '#f999de',
+    borderColor: '#ff1fa9',
   },
   modalHeader: {
     flexDirection: 'row',
@@ -868,7 +868,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
   },
   modalScroll: {
     padding: 20,
@@ -882,18 +882,18 @@ const styles = StyleSheet.create({
   fingerCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(249, 153, 222, 0.05)',
+    backgroundColor: 'rgba(255, 31, 169, 0.05)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.2)',
+    borderColor: 'rgba(255, 31, 169, 0.2)',
   },
   fingerNumber: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#f999de',
+    backgroundColor: '#ff1fa9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -909,7 +909,7 @@ const styles = StyleSheet.create({
   fingerName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 4,
   },
   fingerMeaning: {
@@ -919,18 +919,18 @@ const styles = StyleSheet.create({
   modalNote: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(249, 153, 222, 0.1)',
+    backgroundColor: 'rgba(255, 31, 169, 0.1)',
     padding: 14,
     borderRadius: 12,
     gap: 10,
     marginTop: 12,
     borderWidth: 1,
-    borderColor: 'rgba(249, 153, 222, 0.3)',
+    borderColor: 'rgba(255, 31, 169, 0.3)',
   },
   modalNoteText: {
     flex: 1,
     fontSize: 13,
-    color: '#f999de',
+    color: '#ff1fa9',
     lineHeight: 18,
   },
 });

@@ -52,7 +52,7 @@ export default function HomeScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#f999de" />
+        <ActivityIndicator size="large" color="#ff1fa9" />
       </View>
     );
   }
@@ -68,22 +68,22 @@ export default function HomeScreen() {
         {/* Statistics Cards */}
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
-            <Ionicons name="calendar" size={32} color="#f999de" />
+            <Ionicons name="calendar" size={32} color="#ff1fa9" />
             <Text style={styles.statNumber}>{statistics?.total_sessions || 0}</Text>
             <Text style={styles.statLabel}>Total Sessions</Text>
           </View>
           <View style={styles.statCard}>
-            <Ionicons name="time" size={32} color="#f999de" />
+            <Ionicons name="time" size={32} color="#ff1fa9" />
             <Text style={styles.statNumber}>{statistics?.total_practice_hours || 0}h</Text>
             <Text style={styles.statLabel}>Practice Time</Text>
           </View>
           <View style={styles.statCard}>
-            <Ionicons name="trophy" size={32} color="#f999de" />
+            <Ionicons name="trophy" size={32} color="#ff1fa9" />
             <Text style={styles.statNumber}>{statistics?.completed_goals || 0}/{statistics?.total_goals || 0}</Text>
             <Text style={styles.statLabel}>Goals</Text>
           </View>
           <View style={styles.statCard}>
-            <Ionicons name="flame" size={32} color="#f999de" />
+            <Ionicons name="flame" size={32} color="#ff1fa9" />
             <Text style={styles.statNumber}>{statistics?.weekly_sessions || 0}</Text>
             <Text style={styles.statLabel}>This Week</Text>
           </View>
@@ -96,7 +96,7 @@ export default function HomeScreen() {
             goals.map((goal) => (
               <View key={goal.id} style={styles.goalCard}>
                 <View style={styles.goalIcon}>
-                  <Ionicons name="flag" size={20} color="#f999de" />
+                  <Ionicons name="flag" size={20} color="#ff1fa9" />
                 </View>
                 <View style={styles.goalContent}>
                   <Text style={styles.goalTitle}>{goal.title}</Text>
@@ -121,9 +121,9 @@ export default function HomeScreen() {
               style={styles.refreshButton}
             >
               {insightsLoading ? (
-                <ActivityIndicator size="small" color="#f999de" />
+                <ActivityIndicator size="small" color="#ff1fa9" />
               ) : (
-                <Ionicons name="refresh" size={20} color="#f999de" />
+                <Ionicons name="refresh" size={20} color="#ff1fa9" />
               )}
             </TouchableOpacity>
           </View>
@@ -132,7 +132,7 @@ export default function HomeScreen() {
               <Text style={styles.insightsText}>{insights}</Text>
             ) : (
               <TouchableOpacity onPress={loadInsights} style={styles.insightsButton}>
-                <Ionicons name="sparkles" size={24} color="#f999de" />
+                <Ionicons name="sparkles" size={24} color="#ff1fa9" />
                 <Text style={styles.insightsButtonText}>Get Personalized Insights</Text>
               </TouchableOpacity>
             )}
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#f999de',
+    borderColor: '#ff1fa9',
   },
   statNumber: {
     fontSize: 28,
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginBottom: 16,
   },
   refreshButton: {
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: '#f999de',
+    borderColor: '#ff1fa9',
   },
   insightsText: {
     fontSize: 15,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   insightsButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#f999de',
+    color: '#ff1fa9',
     marginTop: 12,
   },
   emptyText: {
