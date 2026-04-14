@@ -19,7 +19,7 @@ export default function PracticeScreen() {
       title: 'Teacher Videos',
       description: 'Watch and learn at different speeds (0.5x-2x)',
       icon: 'play-circle',
-      color: '#4ECDC4',
+      color: '#5e18eb',
       route: '/practice/videos',
     },
     {
@@ -88,7 +88,7 @@ export default function PracticeScreen() {
               Log a practice session without recording
             </Text>
             <TouchableOpacity style={styles.quickLogButton}>
-              <Ionicons name="add-circle" size={24} color="#FFD700" />
+              <Ionicons name="add-circle" size={24} color="#f999de" />
               <Text style={styles.quickLogButtonText}>Log Session</Text>
             </TouchableOpacity>
           </View>
@@ -103,7 +103,7 @@ export default function PracticeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
   },
   scrollView: {
     flex: 1,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   optionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
@@ -162,15 +162,15 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 16,
   },
   quickLogCard: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   quickLogText: {
     fontSize: 15,
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     borderRadius: 12,
     padding: 16,
     gap: 8,
@@ -189,6 +189,6 @@ const styles = StyleSheet.create({
   quickLogButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFD700',
+    color: '#f999de',
   },
 });

@@ -52,7 +52,7 @@ export default function HomeScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FFD700" />
+        <ActivityIndicator size="large" color="#f999de" />
       </View>
     );
   }
@@ -68,22 +68,22 @@ export default function HomeScreen() {
         {/* Statistics Cards */}
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
-            <Ionicons name="calendar" size={32} color="#FFD700" />
+            <Ionicons name="calendar" size={32} color="#f999de" />
             <Text style={styles.statNumber}>{statistics?.total_sessions || 0}</Text>
             <Text style={styles.statLabel}>Total Sessions</Text>
           </View>
           <View style={styles.statCard}>
-            <Ionicons name="time" size={32} color="#FFD700" />
+            <Ionicons name="time" size={32} color="#f999de" />
             <Text style={styles.statNumber}>{statistics?.total_practice_hours || 0}h</Text>
             <Text style={styles.statLabel}>Practice Time</Text>
           </View>
           <View style={styles.statCard}>
-            <Ionicons name="trophy" size={32} color="#FFD700" />
+            <Ionicons name="trophy" size={32} color="#f999de" />
             <Text style={styles.statNumber}>{statistics?.completed_goals || 0}/{statistics?.total_goals || 0}</Text>
             <Text style={styles.statLabel}>Goals</Text>
           </View>
           <View style={styles.statCard}>
-            <Ionicons name="flame" size={32} color="#FFD700" />
+            <Ionicons name="flame" size={32} color="#f999de" />
             <Text style={styles.statNumber}>{statistics?.weekly_sessions || 0}</Text>
             <Text style={styles.statLabel}>This Week</Text>
           </View>
@@ -96,7 +96,7 @@ export default function HomeScreen() {
             goals.map((goal) => (
               <View key={goal.id} style={styles.goalCard}>
                 <View style={styles.goalIcon}>
-                  <Ionicons name="flag" size={20} color="#FFD700" />
+                  <Ionicons name="flag" size={20} color="#f999de" />
                 </View>
                 <View style={styles.goalContent}>
                   <Text style={styles.goalTitle}>{goal.title}</Text>
@@ -121,9 +121,9 @@ export default function HomeScreen() {
               style={styles.refreshButton}
             >
               {insightsLoading ? (
-                <ActivityIndicator size="small" color="#FFD700" />
+                <ActivityIndicator size="small" color="#f999de" />
               ) : (
-                <Ionicons name="refresh" size={20} color="#FFD700" />
+                <Ionicons name="refresh" size={20} color="#f999de" />
               )}
             </TouchableOpacity>
           </View>
@@ -132,7 +132,7 @@ export default function HomeScreen() {
               <Text style={styles.insightsText}>{insights}</Text>
             ) : (
               <TouchableOpacity onPress={loadInsights} style={styles.insightsButton}>
-                <Ionicons name="sparkles" size={24} color="#FFD700" />
+                <Ionicons name="sparkles" size={24} color="#f999de" />
                 <Text style={styles.insightsButtonText}>Get Personalized Insights</Text>
               </TouchableOpacity>
             )}
@@ -148,11 +148,11 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -181,12 +181,12 @@ const styles = StyleSheet.create({
   },
   statCard: {
     width: '47%',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   statNumber: {
     fontSize: 28,
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 16,
   },
   refreshButton: {
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   goalCard: {
     flexDirection: 'row',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -253,11 +253,11 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   insightsCard: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   insightsText: {
     fontSize: 15,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   insightsButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFD700',
+    color: '#f999de',
     marginTop: 12,
   },
   emptyText: {

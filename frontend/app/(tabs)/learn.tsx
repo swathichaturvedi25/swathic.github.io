@@ -106,10 +106,10 @@ export default function LearnScreen() {
             disabled={quizLoading}
           >
             {quizLoading ? (
-              <ActivityIndicator size="small" color="#FFD700" />
+              <ActivityIndicator size="small" color="#f999de" />
             ) : (
               <>
-                <Ionicons name="flash" size={24} color="#FFD700" />
+                <Ionicons name="flash" size={24} color="#f999de" />
                 <Text style={styles.quizButtonText}>Surprise Test</Text>
                 <Text style={styles.quizButtonSubtext}>Test your knowledge!</Text>
               </>
@@ -136,7 +136,7 @@ export default function LearnScreen() {
               <Ionicons
                 name={cat.icon as any}
                 size={18}
-                color={selectedCategory === cat.id ? '#1a0033' : '#FFD700'}
+                color={selectedCategory === cat.id ? '#0d0015' : '#f999de'}
               />
               <Text
                 style={[
@@ -153,13 +153,13 @@ export default function LearnScreen() {
         {/* Content List */}
         <View style={styles.contentSection}>
           {loading ? (
-            <ActivityIndicator size="large" color="#FFD700" style={{ marginTop: 40 }} />
+            <ActivityIndicator size="large" color="#f999de" style={{ marginTop: 40 }} />
           ) : selectedCategory === 'shlokas' ? (
             shlokas.length > 0 ? (
               shlokas.map((shloka) => (
                 <TouchableOpacity key={shloka.id} style={styles.shlokaCard}>
                   <View style={styles.shlokaHeader}>
-                    <Ionicons name="sparkles" size={24} color="#FFD700" />
+                    <Ionicons name="sparkles" size={24} color="#f999de" />
                     <Text style={styles.shlokaTitle}>{shloka.title}</Text>
                   </View>
                   <Text style={styles.shlokaSanskrit}>{shloka.sanskrit_text}</Text>
@@ -219,7 +219,7 @@ export default function LearnScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
   },
   scrollView: {
     flex: 1,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -243,17 +243,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   quizButton: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 24,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   quizButtonText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginTop: 8,
   },
   quizButtonSubtext: {
@@ -274,27 +274,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
     gap: 6,
   },
   categoryChipActive: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#f999de',
   },
   categoryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFD700',
+    color: '#f999de',
   },
   categoryTextActive: {
-    color: '#1a0033',
+    color: '#0d0015',
   },
   contentSection: {
     paddingHorizontal: 24,
   },
   contentCard: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   categoryBadge: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#f999de',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   categoryBadgeText: {
     fontSize: 11,
     fontWeight: 'bold',
-    color: '#1a0033',
+    color: '#0d0015',
   },
   contentTitle: {
     fontSize: 18,
@@ -335,16 +335,16 @@ const styles = StyleSheet.create({
   },
   readMore: {
     fontSize: 14,
-    color: '#FFD700',
+    color: '#f999de',
     fontWeight: '600',
   },
   shlokaCard: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   shlokaHeader: {
     flexDirection: 'row',
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
   shlokaTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     flex: 1,
   },
   shlokaSanskrit: {
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
   },
   viniyogaLabel: {
     fontSize: 13,
-    color: '#FFD700',
+    color: '#f999de',
     fontWeight: '600',
     marginBottom: 4,
   },

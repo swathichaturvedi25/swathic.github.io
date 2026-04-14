@@ -119,7 +119,7 @@ export default function ProfileScreen() {
               style={styles.addButton}
               onPress={() => setModalVisible(true)}
             >
-              <Ionicons name="add-circle" size={24} color="#FFD700" />
+              <Ionicons name="add-circle" size={24} color="#f999de" />
             </TouchableOpacity>
           </View>
 
@@ -133,7 +133,7 @@ export default function ProfileScreen() {
                   <Ionicons
                     name={goal.completed ? 'checkmark-circle' : 'ellipse-outline'}
                     size={28}
-                    color={goal.completed ? '#4CAF50' : '#FFD700'}
+                    color={goal.completed ? '#4CAF50' : '#f999de'}
                   />
                 </TouchableOpacity>
                 <View style={styles.goalContent}>
@@ -187,7 +187,7 @@ export default function ProfileScreen() {
             quizResults.map((result) => (
               <View key={result.id} style={styles.quizCard}>
                 <View style={styles.quizIcon}>
-                  <Ionicons name="trophy" size={24} color="#FFD700" />
+                  <Ionicons name="trophy" size={24} color="#f999de" />
                 </View>
                 <View style={styles.quizContent}>
                   <Text style={styles.quizType}>{result.quiz_type}</Text>
@@ -269,7 +269,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
   },
   scrollView: {
     flex: 1,
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 16,
   },
   addButton: {
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   goalCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   quizCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   quizPercentage: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#f999de',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   quizPercentageText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a0033',
+    color: '#0d0015',
   },
   emptyText: {
     fontSize: 15,
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -424,10 +424,10 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
   },
   input: {
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   createButton: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#f999de',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -456,6 +456,6 @@ const styles = StyleSheet.create({
   createButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a0033',
+    color: '#0d0015',
   },
 });

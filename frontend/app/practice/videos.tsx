@@ -213,17 +213,17 @@ export default function TeacherVideosScreen() {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#FFD700" />
+          <Ionicons name="arrow-back" size={24} color="#f999de" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Teacher Videos</Text>
         <TouchableOpacity onPress={pickVideo} style={styles.uploadButton}>
-          <Ionicons name="add-circle" size={28} color="#FFD700" />
+          <Ionicons name="add-circle" size={28} color="#f999de" />
         </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.description}>
-          <Ionicons name="information-circle" size={20} color="#FFD700" />
+          <Ionicons name="information-circle" size={20} color="#f999de" />
           <View style={{ flex: 1 }}>
             <Text style={styles.descriptionText}>
               Upload your teacher's videos and watch them at slower speeds to learn step-by-step
@@ -235,7 +235,7 @@ export default function TeacherVideosScreen() {
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color="#FFD700" style={{ marginTop: 40 }} />
+          <ActivityIndicator size="large" color="#f999de" style={{ marginTop: 40 }} />
         ) : videos.length > 0 ? (
           <View style={styles.videosContainer}>
             {videos.map((video) => (
@@ -245,7 +245,7 @@ export default function TeacherVideosScreen() {
                   onPress={() => playVideo(video)}
                 >
                   <View style={styles.videoThumbnail}>
-                    <Ionicons name="play-circle" size={48} color="#FFD700" />
+                    <Ionicons name="play-circle" size={48} color="#f999de" />
                   </View>
                   <View style={styles.videoInfo}>
                     <Text style={styles.videoTitle}>{video.title}</Text>
@@ -319,7 +319,7 @@ export default function TeacherVideosScreen() {
 
             {selectedVideoUri && (
               <View style={styles.videoPreview}>
-                <Ionicons name="videocam" size={40} color="#FFD700" />
+                <Ionicons name="videocam" size={40} color="#f999de" />
                 <Text style={styles.videoSelectedText}>Video selected</Text>
               </View>
             )}
@@ -375,10 +375,10 @@ export default function TeacherVideosScreen() {
               disabled={uploading}
             >
               {uploading ? (
-                <ActivityIndicator size="small" color="#1a0033" />
+                <ActivityIndicator size="small" color="#0d0015" />
               ) : (
                 <>
-                  <Ionicons name="cloud-upload" size={24} color="#1a0033" />
+                  <Ionicons name="cloud-upload" size={24} color="#0d0015" />
                   <Text style={styles.uploadButtonText}>Upload Video</Text>
                 </>
               )}
@@ -396,7 +396,7 @@ export default function TeacherVideosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
   },
   header: {
     flexDirection: 'row',
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
   },
   uploadButton: {
     padding: 8,
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
   description: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     margin: 16,
     padding: 16,
     borderRadius: 12,
@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
   videoCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 20,
     padding: 8,
     borderWidth: 1,
@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -546,22 +546,22 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
   },
   videoPreview: {
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     borderRadius: 12,
     marginBottom: 16,
   },
   videoSelectedText: {
     fontSize: 14,
-    color: '#FFD700',
+    color: '#f999de',
     marginTop: 8,
   },
   input: {
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
@@ -589,12 +589,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
     borderWidth: 2,
     alignItems: 'center',
   },
   difficultyChipActive: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
   },
   difficultyChipText: {
     fontSize: 12,
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
   },
   uploadButtonLarge: {
     flexDirection: 'row',
-    backgroundColor: '#FFD700',
+    backgroundColor: '#f999de',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -616,11 +616,11 @@ const styles = StyleSheet.create({
   uploadButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a0033',
+    color: '#0d0015',
   },
   uploadingText: {
     fontSize: 14,
-    color: '#FFD700',
+    color: '#f999de',
     textAlign: 'center',
     marginTop: 12,
   },

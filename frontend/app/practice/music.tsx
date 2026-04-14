@@ -20,7 +20,7 @@ export default function MusicScreen() {
       description: 'Rhythmic cycles, Laya & Mardala patterns',
       icon: 'metronome-outline' as const,
       fallbackIcon: 'pulse' as const,
-      color: '#FFD700',
+      color: '#f999de',
       route: '/practice/tala',
     },
   ];
@@ -29,7 +29,7 @@ export default function MusicScreen() {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#FFD700" />
+          <Ionicons name="arrow-back" size={24} color="#f999de" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Music</Text>
         <View style={styles.placeholder} />
@@ -77,7 +77,7 @@ export default function MusicScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a001a',
+    backgroundColor: '#050010',
   },
   header: {
     flexDirection: 'row',
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
   },
   placeholder: {
     width: 40,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 8,
   },
   introText: {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   itemCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,

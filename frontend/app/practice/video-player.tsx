@@ -205,7 +205,7 @@ export default function VideoPlayerScreen() {
         <View style={styles.videoContainer}>
           {isLoading && (
             <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#FFD700" />
+              <ActivityIndicator size="large" color="#f999de" />
               <Text style={styles.loadingText}>Loading...</Text>
             </View>
           )}
@@ -245,7 +245,7 @@ export default function VideoPlayerScreen() {
                   <Ionicons
                     name="sync"
                     size={24}
-                    color={isMirrored ? "#FFD700" : "#FFF"}
+                    color={isMirrored ? "#f999de" : "#FFF"}
                   />
                 </TouchableOpacity>
                 
@@ -262,7 +262,7 @@ export default function VideoPlayerScreen() {
               style={styles.centerPlayButton}
               onPress={handlePlayPause}
             >
-              <Ionicons name="play-circle" size={80} color="rgba(255, 215, 0, 0.9)" />
+              <Ionicons name="play-circle" size={80} color="rgba(249, 153, 222, 0.9)" />
             </TouchableOpacity>
           )}
 
@@ -286,9 +286,9 @@ export default function VideoPlayerScreen() {
                         clearTimeout(hideControlsTimeout.current);
                       }
                     }}
-                    minimumTrackTintColor="#FFD700"
+                    minimumTrackTintColor="#f999de"
                     maximumTrackTintColor="rgba(255, 255, 255, 0.3)"
-                    thumbTintColor="#FFD700"
+                    thumbTintColor="#f999de"
                   />
                   <Text style={styles.timeText}>
                     {formatTime(status.durationMillis || 0)}
@@ -323,7 +323,7 @@ export default function VideoPlayerScreen() {
                   style={styles.speedButton}
                 >
                   <Text style={styles.speedButtonText}>{playbackSpeed}x</Text>
-                  <Ionicons name="caret-down" size={16} color="#FFD700" />
+                  <Ionicons name="caret-down" size={16} color="#f999de" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -360,7 +360,7 @@ export default function VideoPlayerScreen() {
                     {option.label}
                   </Text>
                   {playbackSpeed === option.value && (
-                    <Ionicons name="checkmark" size={20} color="#FFD700" />
+                    <Ionicons name="checkmark" size={20} color="#f999de" />
                   )}
                 </TouchableOpacity>
               ))}
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   loadingText: {
-    color: '#FFD700',
+    color: '#f999de',
     marginTop: 12,
     fontSize: 14,
   },
@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
   },
   rewindText: {
     fontSize: 10,
-    color: '#FFD700',
+    color: '#f999de',
     position: 'absolute',
     bottom: -2,
     fontWeight: 'bold',
@@ -479,11 +479,11 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    backgroundColor: 'rgba(249, 153, 222, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   spacer: {
     flex: 1,
@@ -493,16 +493,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+    backgroundColor: 'rgba(249, 153, 222, 0.1)',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
     gap: 4,
   },
   speedButtonText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
   },
   modalOverlay: {
     flex: 1,
@@ -511,18 +511,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   speedPickerContainer: {
-    backgroundColor: '#1a0033',
+    backgroundColor: '#0d0015',
     borderRadius: 16,
     padding: 20,
     width: '80%',
     maxWidth: 300,
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   speedPickerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#f999de',
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -534,19 +534,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     marginBottom: 8,
-    backgroundColor: 'rgba(255, 215, 0, 0.05)',
+    backgroundColor: 'rgba(249, 153, 222, 0.05)',
   },
   speedOptionActive: {
-    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    backgroundColor: 'rgba(249, 153, 222, 0.2)',
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#f999de',
   },
   speedOptionText: {
     fontSize: 16,
     color: '#CCC',
   },
   speedOptionTextActive: {
-    color: '#FFD700',
+    color: '#f999de',
     fontWeight: 'bold',
   },
   errorText: {
