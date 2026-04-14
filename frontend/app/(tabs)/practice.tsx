@@ -16,10 +16,10 @@ export default function PracticeScreen() {
   const practiceOptions = [
     {
       id: 'watch-videos',
-      title: 'Teacher Videos',
+      title: 'Video Practice',
       description: 'Watch and learn at different speeds (0.5x-2x)',
       icon: 'play-circle',
-      color: '#5e18eb',
+      color: '#ffeb99',
       route: '/practice/videos',
     },
     {
@@ -27,7 +27,7 @@ export default function PracticeScreen() {
       title: 'Hasta Bheda',
       description: 'Learn and practice hand gestures',
       icon: 'hand-left',
-      color: '#FFD93D',
+      color: '#ffeb99',
       route: '/practice/hasta-bheda',
     },
     {
@@ -35,7 +35,7 @@ export default function PracticeScreen() {
       title: 'Music',
       description: 'Tala, rhythms and Odissi music',
       icon: 'musical-notes',
-      color: '#95E1D3',
+      color: '#ffeb99',
       route: '/practice/music',
     },
   ];
