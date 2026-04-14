@@ -86,7 +86,7 @@ export default function CalendarScreen() {
 
   const markedDates = events.reduce((acc: any, event: any) => {
     const date = new Date(event.event_date).toISOString().split('T')[0];
-    acc[date] = { marked: true, dotColor: '#ff1fa9' };
+    acc[date] = { marked: true, dotColor: '#ff2d1f' };
     return acc;
   }, {});
 
@@ -94,7 +94,7 @@ export default function CalendarScreen() {
     markedDates[selectedDate] = {
       ...markedDates[selectedDate],
       selected: true,
-      selectedColor: '#ff1fa9',
+      selectedColor: '#ff2d1f',
     };
   }
 
@@ -118,16 +118,16 @@ export default function CalendarScreen() {
             theme={{
               backgroundColor: '#0d0015',
               calendarBackground: '#0d0015',
-              textSectionTitleColor: '#ff1fa9',
-              selectedDayBackgroundColor: '#ff1fa9',
+              textSectionTitleColor: '#ff2d1f',
+              selectedDayBackgroundColor: '#ff2d1f',
               selectedDayTextColor: '#0d0015',
-              todayTextColor: '#ff1fa9',
+              todayTextColor: '#ff2d1f',
               dayTextColor: '#FFFFFF',
               textDisabledColor: '#444',
-              dotColor: '#ff1fa9',
+              dotColor: '#ff2d1f',
               selectedDotColor: '#0d0015',
-              arrowColor: '#ff1fa9',
-              monthTextColor: '#ff1fa9',
+              arrowColor: '#ff2d1f',
+              monthTextColor: '#ff2d1f',
             }}
           />
         </View>
@@ -137,7 +137,7 @@ export default function CalendarScreen() {
             style={styles.addButton}
             onPress={() => setModalVisible(true)}
           >
-            <Ionicons name="add-circle" size={24} color="#ff1fa9" />
+            <Ionicons name="add-circle" size={24} color="#ff2d1f" />
             <Text style={styles.addButtonText}>Add Event</Text>
           </TouchableOpacity>
         </View>
@@ -163,7 +163,7 @@ export default function CalendarScreen() {
                             : 'notifications'
                         }
                         size={24}
-                        color="#ff1fa9"
+                        color="#ff2d1f"
                       />
                     </View>
                     <View style={styles.eventContent}>
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
   },
   actionBar: {
     padding: 24,
@@ -302,13 +302,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
     gap: 8,
   },
   addButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
   },
   eventsSection: {
     paddingHorizontal: 24,
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     marginBottom: 16,
   },
   eventCard: {
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
   },
   eventType: {
     fontSize: 11,
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     fontWeight: '600',
   },
   deleteButton: {
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
   },
   input: {
     backgroundColor: '#050010',
@@ -424,21 +424,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#050010',
     borderWidth: 1,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
   },
   eventTypeChipActive: {
-    backgroundColor: '#ff1fa9',
+    backgroundColor: '#ff2d1f',
   },
   eventTypeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
   },
   eventTypeTextActive: {
     color: '#0d0015',
   },
   createButton: {
-    backgroundColor: '#ff1fa9',
+    backgroundColor: '#ff2d1f',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',

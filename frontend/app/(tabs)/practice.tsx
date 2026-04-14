@@ -88,7 +88,7 @@ export default function PracticeScreen() {
               Log a practice session without recording
             </Text>
             <TouchableOpacity style={styles.quickLogButton}>
-              <Ionicons name="add-circle" size={24} color="#ff1fa9" />
+              <Ionicons name="add-circle" size={24} color="#ff2d1f" />
               <Text style={styles.quickLogButtonText}>Log Session</Text>
             </TouchableOpacity>
           </View>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     marginBottom: 4,
   },
   headerSubtitle: {
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     marginBottom: 16,
   },
   quickLogCard: {
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
   },
   quickLogText: {
     fontSize: 15,
@@ -189,6 +189,6 @@ const styles = StyleSheet.create({
   quickLogButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
   },
 });

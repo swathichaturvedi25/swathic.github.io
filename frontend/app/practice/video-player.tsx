@@ -205,7 +205,7 @@ export default function VideoPlayerScreen() {
         <View style={styles.videoContainer}>
           {isLoading && (
             <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#ff1fa9" />
+              <ActivityIndicator size="large" color="#ff2d1f" />
               <Text style={styles.loadingText}>Loading...</Text>
             </View>
           )}
@@ -245,7 +245,7 @@ export default function VideoPlayerScreen() {
                   <Ionicons
                     name="sync"
                     size={24}
-                    color={isMirrored ? "#ff1fa9" : "#FFF"}
+                    color={isMirrored ? "#ff2d1f" : "#FFF"}
                   />
                 </TouchableOpacity>
                 
@@ -262,7 +262,7 @@ export default function VideoPlayerScreen() {
               style={styles.centerPlayButton}
               onPress={handlePlayPause}
             >
-              <Ionicons name="play-circle" size={80} color="rgba(255, 31, 169, 0.9)" />
+              <Ionicons name="play-circle" size={80} color="rgba(255, 45, 31, 0.9)" />
             </TouchableOpacity>
           )}
 
@@ -286,9 +286,9 @@ export default function VideoPlayerScreen() {
                         clearTimeout(hideControlsTimeout.current);
                       }
                     }}
-                    minimumTrackTintColor="#ff1fa9"
+                    minimumTrackTintColor="#ff2d1f"
                     maximumTrackTintColor="rgba(255, 255, 255, 0.3)"
-                    thumbTintColor="#ff1fa9"
+                    thumbTintColor="#ff2d1f"
                   />
                   <Text style={styles.timeText}>
                     {formatTime(status.durationMillis || 0)}
@@ -323,7 +323,7 @@ export default function VideoPlayerScreen() {
                   style={styles.speedButton}
                 >
                   <Text style={styles.speedButtonText}>{playbackSpeed}x</Text>
-                  <Ionicons name="caret-down" size={16} color="#ff1fa9" />
+                  <Ionicons name="caret-down" size={16} color="#ff2d1f" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -360,7 +360,7 @@ export default function VideoPlayerScreen() {
                     {option.label}
                   </Text>
                   {playbackSpeed === option.value && (
-                    <Ionicons name="checkmark" size={20} color="#ff1fa9" />
+                    <Ionicons name="checkmark" size={20} color="#ff2d1f" />
                   )}
                 </TouchableOpacity>
               ))}
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   loadingText: {
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     marginTop: 12,
     fontSize: 14,
   },
@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
   },
   rewindText: {
     fontSize: 10,
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     position: 'absolute',
     bottom: -2,
     fontWeight: 'bold',
@@ -479,11 +479,11 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: 'rgba(255, 31, 169, 0.2)',
+    backgroundColor: 'rgba(255, 45, 31, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
   },
   spacer: {
     flex: 1,
@@ -493,16 +493,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: 'rgba(255, 31, 169, 0.1)',
+    backgroundColor: 'rgba(255, 45, 31, 0.1)',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
     gap: 4,
   },
   speedButtonText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
   },
   modalOverlay: {
     flex: 1,
@@ -517,12 +517,12 @@ const styles = StyleSheet.create({
     width: '80%',
     maxWidth: 300,
     borderWidth: 2,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
   },
   speedPickerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -534,19 +534,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     marginBottom: 8,
-    backgroundColor: 'rgba(255, 31, 169, 0.05)',
+    backgroundColor: 'rgba(255, 45, 31, 0.05)',
   },
   speedOptionActive: {
-    backgroundColor: 'rgba(255, 31, 169, 0.2)',
+    backgroundColor: 'rgba(255, 45, 31, 0.2)',
     borderWidth: 1,
-    borderColor: '#ff1fa9',
+    borderColor: '#ff2d1f',
   },
   speedOptionText: {
     fontSize: 16,
     color: '#CCC',
   },
   speedOptionTextActive: {
-    color: '#ff1fa9',
+    color: '#ff2d1f',
     fontWeight: 'bold',
   },
   errorText: {
