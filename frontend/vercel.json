@@ -1,6 +1,4 @@
 {
-  "version": 2,
-  "buildCommand": "npx expo export --platform web",
-  "outputDirectory": "dist",
-  "installCommand": "yarn install"
+  "buildCommand": "npx expo export:web",
+  "outputDirectory": "web-build"
 }
