@@ -15,10 +15,5 @@
       "memory": 1024,
       "maxDuration": 30
     }
-  },
-  "env": {
-    "MONGO_URL": "@mongo_url",
-    "DB_NAME": "@db_name",
-    "EMERGENT_LLM_KEY": "@emergent_llm_key"
   }
 }
